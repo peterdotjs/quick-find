@@ -1,0 +1,27 @@
+{
+  "name": "Text Search",
+  "short_name": "Text Search",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Text search made easy",
+  "browser_action": {
+    //"default_icon": "images/icons/icon128.png",
+    "default_popup": "index.html",
+    "default_title": "Text Search"
+  },
+  //"icons": { "16": "images/icons/icon16.png",
+  //         "48": "images/icons/icon48.png",
+  //        "128": "images/icons/icon128.png" },
+  // "options_page": "options.html",
+  "permissions": ["storage"],
+  "background": {
+    "scripts": ["js/background.js"]
+  },
+  "content_scripts": [ {
+      "js": ["js/lib/jquery-2.1.1.min.js","js/text-search.js" ],
+      "css": ["css/styles.css"],
+      "matches": [ "http://*/*", "https://*/*", "ftp://*/*" ],
+      "run_at": "document_end"
+   } ],
+  "offline_enabled": true
+}
