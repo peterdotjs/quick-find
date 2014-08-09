@@ -3,6 +3,24 @@
 	top: 0;
 	right: 0;
 	width: 300px;
-	min-height: 200px;
-	background-color: white;	
+	max-height: 400px;
+	z-index: 1000000;
+	background-color: white;
+	overflow: auto;
+
+	li {
+		margin: 10px;
+		padding: 10px;
+		border: 1px solid grey;
+		cursor: pointer;
+		list-style-type: none;
+
+		span {
+			font-weight: bold;
+		}
+	}
+}
+
+.ts-ce-hl {
+	background: yellow;
 }
