@@ -8,6 +8,9 @@
   background-color: white;
   overflow: auto;
 }
+#text-search-extension.hide-text-search {
+  display: none;
+}
 #text-search-extension li {
   margin: 10px;
   padding: 10px;
@@ -17,4 +20,13 @@
 }
 #text-search-extension li span {
   font-weight: bold;
+}
+#text-search-extension li .ts-ce-hl {
+  background: white !important;
+}
+#text-search-extension li.selected {
+  background: lightblue;
+}
+.ts-ce-hl {
+  background: yellow !important;
 }

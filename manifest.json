@@ -20,8 +20,7 @@
   "content_scripts": [ {
       "js": ["js/lib/jquery-2.1.1.min.js","js/text-search.js" ],
       "css": ["css/styles.css"],
-      "matches": [ "http://*/*", "https://*/*", "ftp://*/*" ],
-      "run_at": "document_end"
+      "matches": [ "http://*/*", "https://*/*", "ftp://*/*" ]
    } ],
   "offline_enabled": true
 }

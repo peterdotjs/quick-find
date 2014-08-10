@@ -8,6 +8,10 @@
 	background-color: white;
 	overflow: auto;
 
+	&.hide-text-search {
+		display: none;
+	}
+
 	li {
 		margin: 10px;
 		padding: 10px;
@@ -18,9 +22,17 @@
 		span {
 			font-weight: bold;
 		}
+
+		.ts-ce-hl {
+			background: transparent; !important;
+		}
+
+		&.selected {
+			background: lightblue;
+		}
 	}
 }
 
 .ts-ce-hl {
-	background: yellow;
+	background: yellow !important;
 }
