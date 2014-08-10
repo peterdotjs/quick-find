@@ -4,7 +4,10 @@
 
 	var input = "",
 		$displayEl = null,
+		$searchIndex = null,
+		$searchTotal =  null,
 		$selected = null,
+		$resultSet = null,
 		caseSensitive = true;
 
 	$(document).on('click','#text-search-extension li',selectCallback);
@@ -19,6 +22,11 @@
 		$selected = $this;
 		$selected.addClass('selected');
 
+		if($resultSet.html() !== ''){
+			$searchIndex.text($this.index() + 1);
+			$searchTotal.text($this.siblings().length + 1);
+		}
+
 		data.textEl.html(data.textEl.html().replace(data.input,'<span class="ts-ce-hl">' + data.input + '</span>'))
 
 		$('html, body').animate({
@@ -32,6 +40,10 @@
 			data.textEl.html(data.textEl.html().replace('<span class="ts-ce-hl">' + data.input + '</span>',data.input))
 			$selected.removeClass('selected');
 		}
+
+		$searchIndex.text(0);
+		$searchTotal.text(0);
+
 	}
 
 	function isVisible(element) {
@@ -47,7 +59,7 @@
 
 	function initDocEvents(doc){
 		$(doc).on('keydown',function(evt){
-			if(evt.which === 191){
+			if(evt.which === 191 && $(evt.target).is('body')){
 				toggleMenu();
 				return false;
 			}
@@ -93,7 +105,7 @@
 				for(var i=0; i<results.length; i++){
 					var $parent = $(results[i]).parent();
 
-					$li = $('<li></li>');
+					$li = $('<li role="menuitem" tabindex="-1"></li>');
 					$li.text(results[i].data)
 						.html($li.html().replace(input,'<span class="ts-ce-hl">' + input + '</span>'))
 
@@ -122,10 +134,16 @@
 
  	//update with regex
 	function textMatch(node){
-		var data = node ? node.data : '';
+		var data = node ? node.data : '',
+			parent = node ? node.parentNode : null;
+
+		if($(parent).is('script,noscript')){
+			return NodeFilter.FILER_REJECT;
+		}
+
 		if(!caseSensitive && data.toLowerCase().indexOf(input.toLowerCase()) !== -1){
 			return NodeFilter.FILTER_ACCEPT;
-		} else if(caseSensitive && data.indexOf(input) !== -1 && isVisible(node.parentNode)){
+		} else if(caseSensitive && data.indexOf(input) !== -1 && isVisible(parent)){
 			return NodeFilter.FILTER_ACCEPT;
 		} else {
 			return NodeFilter.FILER_REJECT;
@@ -135,8 +153,11 @@
 	function toggleMenu(){
 		$displayEl = $('#text-search-extension');
 		if($displayEl.length === 0){
-			$displayEl = $('<div id="text-search-extension"><div class="search-wrap"><input type="text" id="search" placeholder="Find in page" autocomplete="off"></input><i></i></div><ul></ul></div>');
+			$displayEl = $('<div id="text-search-extension"><div class="search-wrap"><div class="search-wrap-inner"><input type="text" id="search" placeholder="Find in page" autocomplete="off"></input><div class="search-index-wrap"><div class="search-index">0</div>of<div class="search-total">0</div></div></div><i tabindex="0"></i></div><ul role="menu"></ul></div>');
 			$('body').after($displayEl);
+			$resultSet = $displayEl.find('ul');
+			$searchIndex = $displayEl.find('.search-index');
+			$searchTotal = $displayEl.find('.search-total');
 			initSearchEvents();
 			$displayEl.find('input').focus();
 		} else {
