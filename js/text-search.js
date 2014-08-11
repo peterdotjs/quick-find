@@ -244,6 +244,8 @@
 					$searchField.val(window.getSelection().toString());
 				}
 				$searchField.trigger('keydown').focus();
+			} else {
+				clearSelect();
 			}
 		}
 	}
