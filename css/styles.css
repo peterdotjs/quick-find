@@ -67,7 +67,7 @@
   border-radius: 50%;
   background: transparent;
   border: 1px solid transparent;
-  padding: 1.5px 3px 1px 2.5px;
+  padding: 0px 3px 1px 4px;
   position: relative;
   top: 4px;
   left: 5px;
@@ -86,7 +86,7 @@
   background: salmon;
 }
 #text-search-extension .search-wrap i:after {
-  content: '✖';
+  content: '×';
 }
 #text-search-extension ul {
   margin: 0px;
