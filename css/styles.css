@@ -113,11 +113,11 @@
   font-weight: bold;
 }
 #text-search-extension ul li .ts-ce-hl {
-  background: transparent !important;
+  background: yellow !important;
 }
 #text-search-extension ul li.selected {
   background: #d5f5ff;
 }
 .ts-ce-hl {
-  background: yellow !important;
+  background: orange !important;
 }

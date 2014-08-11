@@ -112,17 +112,17 @@
 			if(evt.which === 38){ //up
 				$prev = $this.prev();
 				if($prev.length > 0){
-					$prev.trigger('click');
+					$prev.trigger('click').focus();
 				} else {
 					$searchField.focus();
 				}
 			} else if(evt.which === 40){ //down
 				$next = $this.next();
 				if($next.length > 0){
-					$next.trigger('click');
+					$next.trigger('click').focus();
 				}
 			} else if(evt.which === 13){ //enter
-				$this.trigger('click');
+				$this.trigger('click').focus();
 			}
 			return false;
 		},100);
