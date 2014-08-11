@@ -11,6 +11,15 @@
   border: 1px solid silver;
   border-top: 0px;
 }
+#text-search-extension.no-results {
+  padding-bottom: 0px;
+}
+#text-search-extension.no-results .search-wrap {
+  border-bottom: 0px;
+}
+#text-search-extension.no-results ul {
+  border-bottom: 0px;
+}
 #text-search-extension.hide-text-search {
   display: none;
 }
@@ -28,7 +37,7 @@
   vertical-align: top;
   font-size: 16px;
   border-radius: 3px;
-  padding: 2px 7px;
+  padding: 2px 55px 2px 7px;
   margin: 0px;
   border: 1px solid silver;
   box-sizing: border-box;
@@ -85,15 +94,20 @@
   overflow-y: auto;
   overflow-x: hidden;
   max-height: 350px;
+  border-bottom: 1px solid silver;
 }
 #text-search-extension ul li {
-  margin: 10px 0 0 0;
+  margin: 0;
   padding: 10px;
-  border: 1px solid grey;
   cursor: pointer;
   list-style-type: none;
   background: white;
   word-wrap: break-word;
+  border: 1px solid grey;
+  border-bottom: 0px;
+}
+#text-search-extension ul li:first-child {
+  border-top: 0px;
 }
 #text-search-extension ul li span {
   font-weight: bold;

@@ -7,7 +7,12 @@
 		$searchIndex = null,
 		$searchTotal =  null,
 		$resultSet = null,
+		$searchField = null,
 		caseSensitive = true;
+
+	var selectHandler = null,
+		keypressHandler = null,
+		keydownHandlerLi = null;
 
 	initDocEvents(document);
 
@@ -16,19 +21,34 @@
 			data = $this.data(),
 			$selected = getSelected();
 
-		clearSelect($selected);
-		$this.addClass('selected');
-
-		if($resultSet.html() !== ''){
-			$searchIndex.text($this.index() + 1);
-			$searchTotal.text($this.siblings().length + 1);
+		if(selectHandler) {
+			clearTimeout(selectHandler);
 		}
 
-		data.textEl.html(data.textEl.html().replace(data.input,'<span class="ts-ce-hl">' + data.input + '</span>'));
+		selectHandler = setTimeout(function(){
+			clearSelect($selected);
+			$this.addClass('selected');
 
-		$('html, body').animate({
-          scrollTop: data.offsetTop - 100
-          },400);
+			var scrollTop = $this.offset().top - $resultSet.offset().top;
+
+			if((scrollTop > 0  &&  scrollTop + $this.outerHeight() > $resultSet.height()) || scrollTop < 0 &&  scrollTop + $this.height() < $resultSet.outerHeight()){
+				$resultSet.animate({
+					scrollTop: $resultSet.scrollTop() + scrollTop
+				},400);
+			}
+
+			if($resultSet.html() !== ''){
+				$searchIndex.text($this.index() + 1);
+				$searchTotal.text($this.siblings().length + 1);
+			}
+
+			data.textEl.html(data.textEl.html().replace(data.input,'<span class="ts-ce-hl">' + data.input + '</span>'));
+
+			$('html, body').animate({
+	          scrollTop: data.offsetTop - 100
+	          },400);
+
+		},100);
 	}
 
 	function clearSelect($el){
@@ -61,42 +81,10 @@
 	}
 
 	//add settimeout
-
-	var keypressHandler = null,
-		keydownHandlerLi = null;
-
 	function initDocEvents(doc){
 		$(doc).on('click','#text-search-extension li',selectCallback)
-		.on('keydown','#text-search-extension li', function(evt){
-
-			if(keydownHandlerLi){
-				clearTimeout(keydownHandlerLi);
-			}
-
-			var $this = $(this);
-
-			keydownHandlerLi = setTimeout(function(){
-				var $prev = null,
-					$next = null;
-
-				if(evt.which === 38){ //up
-					$prev = $this.prev();
-					if($prev.length > 0){
-						$prev.trigger('click').focus();
-					} else {
-						$('#text-search-extension input').focus();
-					}
-				} else if(evt.which === 40){ //down
-					$next = $this.next();
-					if($next.length > 0){
-						$next.trigger('click').focus();
-					}
-				}
-				return false;
-			},100);
-
-		}).on('keydown',function(evt){
-			console.log(evt);
+		.on('keydown','#text-search-extension li', listItemKeydownCb)
+		.on('keydown',function(evt){
 			if((evt.which === 191 || evt.which === 222 || (evt.which === 70 && evt.altKey === true)) && $(evt.target).is('body')){
 				toggleMenu();
 				return false;
@@ -106,6 +94,38 @@
 
 	function initSearchEvents(){
 		 $displayEl.on('keydown','input', searchKeydownCb).on('click','i',toggleMenu);
+	}
+
+	function listItemKeydownCb(evt){
+		evt.stopPropagation();
+
+		if(keydownHandlerLi){
+			clearTimeout(keydownHandlerLi);
+		}
+
+		var $this = $(this);
+
+		keydownHandlerLi = setTimeout(function(){
+			var $prev = null,
+				$next = null;
+
+			if(evt.which === 38){ //up
+				$prev = $this.prev();
+				if($prev.length > 0){
+					$prev.trigger('click');
+				} else {
+					$searchField.focus();
+				}
+			} else if(evt.which === 40){ //down
+				$next = $this.next();
+				if($next.length > 0){
+					$next.trigger('click');
+				}
+			} else if(evt.which === 13){ //enter
+				$this.trigger('click');
+			}
+			return false;
+		},100);
 	}
 
 	function searchKeydownCb(evt){
@@ -127,12 +147,12 @@
 				if(evt.which === 38){ //up
 					$prev = $selected.prev();
 					if($prev.length > 0){
-						$prev.trigger('click').focus();
+						$prev.trigger('click');
 					}
 				} else if(evt.which === 40){ //down
 					$next = $selected.next();
 					if($next.length > 0){
-						$next.trigger('click').focus();
+						$next.trigger('click');
 					}
 				}
 				return false;
@@ -143,6 +163,7 @@
 
 			clearSelect();
 			$ul.html('');
+			$displayEl.addClass('no-results');
 
 			input = $this.val();
 
@@ -173,6 +194,7 @@
 
 				if(i === 0){
 					$li.addClass('selected');
+					$displayEl.removeClass('no-results');
 				}
 
 				$ul.append($li);
@@ -204,17 +226,24 @@
 	function toggleMenu(){
 		$displayEl = $('#text-search-extension');
 		if($displayEl.length === 0){
-			$displayEl = $('<div id="text-search-extension"><div class="search-wrap"><div class="search-wrap-inner"><input type="text" id="search" placeholder="Find in page" autocomplete="off"></input><div class="search-index-wrap"><div class="search-index">0</div>of<div class="search-total">0</div></div></div><i tabindex="0"></i></div><ul role="menu"></ul></div>');
+			$displayEl = $('<div id="text-search-extension" class="no-results"><div class="search-wrap"><div class="search-wrap-inner"><input type="text" id="search" placeholder="Find in page" autocomplete="off"></input><div class="search-index-wrap"><div class="search-index">0</div>of<div class="search-total">0</div></div></div><i tabindex="0"></i></div><ul role="menu"></ul></div>');
 			$('body').after($displayEl);
 			$resultSet = $displayEl.find('ul');
 			$searchIndex = $displayEl.find('.search-index');
 			$searchTotal = $displayEl.find('.search-total');
 			initSearchEvents();
-			$displayEl.find('input').focus();
+			$searchField = $displayEl.find('input');
+			if(window.getSelection){
+				$searchField.val(window.getSelection().toString());
+			}
+			$searchField.trigger('keydown').focus();
 		} else {
 			$displayEl.toggleClass('hide-text-search');
 			if(!$displayEl.hasClass('hide-text-search')){
-				$displayEl.find('input').focus();
+				if(window.getSelection){
+					$searchField.val(window.getSelection().toString());
+				}
+				$searchField.trigger('keydown').focus();
 			}
 		}
 	}
