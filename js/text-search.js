@@ -158,11 +158,10 @@
 				return false;
 			}
 
-			var $ul = $displayEl.find('ul'),
-				$li;
+			var $li;
 
 			clearSelect();
-			$ul.html('');
+			$resultSet.html('');
 			$displayEl.addClass('no-results');
 
 			input = $this.val();
@@ -197,7 +196,7 @@
 					$displayEl.removeClass('no-results');
 				}
 
-				$ul.append($li);
+				$resultSet.append($li);
 			}
 
 			getSelected().trigger('click');
@@ -246,6 +245,8 @@
 				$searchField.trigger('keydown').focus();
 			} else {
 				clearSelect();
+				$resultSet.html('');
+				$displayEl.addClass('no-results');
 			}
 		}
 	}
