@@ -79,6 +79,7 @@
   font-family: Times;
   font-style: normal;
   vertical-align: top;
+  cursor: pointer;
 }
 #text-search-extension .search-wrap i:hover,
 #text-search-extension .search-wrap i:focus {

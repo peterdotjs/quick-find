@@ -8,7 +8,8 @@
 		$searchTotal =  null,
 		$resultSet = null,
 		$searchField = null,
-		caseSensitive = true;
+		caseSensitive = false,
+		resultsIndex = [];
 
 	var selectHandler = null,
 		keypressHandler = null,
@@ -42,7 +43,10 @@
 				$searchTotal.text($this.siblings().length + 1);
 			}
 
-			data.textEl.html(data.textEl.html().replace(data.input,'<span class="ts-ce-hl">' + data.input + '</span>'));
+			var startIndex = resultsIndex[$this.index()];
+			var input = data.textEl.data.slice(startIndex, startIndex + data.input.length);
+
+			data.el.html(data.el.html().replace(input,'<span class="ts-ce-hl">' + input + '</span>'));
 
 			$('html, body').animate({
 	          scrollTop: data.offsetTop - 100
@@ -55,7 +59,9 @@
 		var $selected = $el || getSelected();
 		if($selected.length > 0){
 			var data = $selected.data();
-			data.textEl.html(data.textEl.html().replace('<span class="ts-ce-hl">' + data.input + '</span>',data.input));
+			var startIndex = resultsIndex[$selected.index()];
+			var input = data.textEl.data.slice(startIndex, startIndex + data.input.length);
+			data.el.html(data.el.html().replace('<span class="ts-ce-hl">' + input + '</span>',input));
 			$selected.removeClass('selected');
 		}
 
@@ -170,23 +176,28 @@
 				return;
 			}
 
+			resultsIndex = [];
+
 			var nodeIterator = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT,textMatch),
-				results = [],
-				textNode = null;
+				textNode = null,
+				length = input.length;
+
 
 			while ((textNode = nodeIterator.nextNode()) != null) {
-				results.push(textNode);
-			}
 
-			for(var i=0; i<results.length; i++){
-				var $parent = $(results[i]).parent();
+				var i = 0,
+					$parent = $(textNode).parent(),
+					startIndex = resultsIndex[i],
+					_input = textNode.data.slice(startIndex, startIndex + length);
 
 				$li = $('<li role="menuitem" tabindex="0"></li>');
-				$li.text(results[i].data)
-					.html($li.html().replace(input,'<span class="ts-ce-hl">' + input + '</span>'));
+
+				$li.text(textNode.data)
+					.html($li.html().replace(_input,'<span class="ts-ce-hl">' + _input + '</span>'));
 
 				$li.data({
-					textEl: $parent,
+					el: $parent,
+					textEl: textNode,
 					offsetTop: $parent.offset().top,
 					input: input
 				});
@@ -195,27 +206,32 @@
 					$li.addClass('selected');
 					$displayEl.removeClass('no-results');
 				}
-
 				$resultSet.append($li);
+				i++;
 			}
 
 			getSelected().trigger('click');
 
-		}, 150);
+		}, 200);
 	}
 
 	//update with regex
 	function textMatch(node){
 		var data = node ? node.data : '',
-			parent = node ? node.parentNode : null;
+			parent = node ? node.parentNode : null,
+			re = null,
+			startIndex = 0;
 
 		if($(parent).is('script,noscript')){
 			return NodeFilter.FILER_REJECT;
 		}
 
-		if(!caseSensitive && data.toLowerCase().indexOf(input.toLowerCase()) !== -1){
-			return NodeFilter.FILTER_ACCEPT;
-		} else if(caseSensitive && data.indexOf(input) !== -1 && isVisible(parent)){
+		re = new RegExp(input.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"),caseSensitive ? "": "i");
+
+		startIndex = data.search(re);
+
+		if(startIndex !== -1){
+			resultsIndex.push(startIndex);
 			return NodeFilter.FILTER_ACCEPT;
 		} else {
 			return NodeFilter.FILER_REJECT;
