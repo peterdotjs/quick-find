@@ -44,9 +44,14 @@
 			}
 
 			var startIndex = resultsIndex[$this.index()];
-			var input = data.textEl.data.slice(startIndex, startIndex + $searchField.val().length);
 
-			data.el.html(data.el.html().replace(input,'<span class="ts-ce-hl">' + input + '</span>'));
+			//ensure modifying correct input if inputQuery occurs elsewhere in parent html.
+			var textElData = data.textEl.data,
+				input = textElData.slice(startIndex, startIndex + $searchField.val().length),
+				newText = textElData.slice().replace(input,'<span class="ts-ce-hl">' + input + '</span>'),
+				innerHTML = data.el.html();
+
+			data.el.html(innerHTML.replace(textElData,newText));
 
 			$('html, body').animate({
 	          scrollTop: data.el.offset().top - 100
