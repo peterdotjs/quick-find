@@ -44,12 +44,12 @@
 			}
 
 			var startIndex = resultsIndex[$this.index()];
-			var input = data.textEl.data.slice(startIndex, startIndex + data.input.length);
+			var input = data.textEl.data.slice(startIndex, startIndex + $searchField.val().length);
 
 			data.el.html(data.el.html().replace(input,'<span class="ts-ce-hl">' + input + '</span>'));
 
 			$('html, body').animate({
-	          scrollTop: data.offsetTop - 100
+	          scrollTop: data.el.offset().top - 100
 	          },400);
 
 		},100);
@@ -58,10 +58,13 @@
 	function clearSelect($el){
 		var $selected = $el || getSelected();
 		if($selected.length > 0){
-			var data = $selected.data();
-			var startIndex = resultsIndex[$selected.index()];
-			var input = data.textEl.data.slice(startIndex, startIndex + data.input.length);
-			data.el.html(data.el.html().replace('<span class="ts-ce-hl">' + input + '</span>',input));
+
+			var data = $selected.data(),
+				highlights = data.el.find('.ts-ce-hl'),
+				content = highlights.eq(0).text();
+
+			data.el.html(data.el.html().replace('<span class="ts-ce-hl">' + content + '</span>', content));
+
 			$selected.removeClass('selected');
 		}
 
@@ -178,41 +181,54 @@
 
 			resultsIndex = [];
 
+			// var start = new Date();
+
 			var nodeIterator = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT,textMatch),
 				textNode = null,
 				length = input.length;
 
 
+			// var tag1 = new Date();
+
+			var i =0,
+				$parent,
+				startIndex,
+				_input;
+
 			while ((textNode = nodeIterator.nextNode()) != null) {
 
-				var i = 0,
-					$parent = $(textNode).parent(),
-					startIndex = resultsIndex[i],
-					_input = textNode.data.slice(startIndex, startIndex + length);
+				$parent = $(textNode).parent();
+				startIndex = resultsIndex[i];
+				_input = textNode.data.slice(startIndex, startIndex + length);
 
 				$li = $('<li role="menuitem" tabindex="0"></li>');
 
 				$li.text(textNode.data)
-					.html($li.html().replace(_input,'<span class="ts-ce-hl">' + _input + '</span>'));
-
-				$li.data({
-					el: $parent,
-					textEl: textNode,
-					offsetTop: $parent.offset().top,
-					input: input
-				});
+					.html($li.html().replace(_input,'<span class="ts-ce-hl">' + _input + '</span>'))
+					.data({
+						el: $parent,
+						textEl: textNode
+					});
 
 				if(i === 0){
 					$li.addClass('selected');
 					$displayEl.removeClass('no-results');
 				}
+
 				$resultSet.append($li);
+
 				i++;
 			}
 
+			// var tag2 = new Date();
+
+			// console.log("tag1: " + (tag1 - start));
+			// console.log("tag2: " + (tag2 - start));
+			// console.log(input);
+
 			getSelected().trigger('click');
 
-		}, 200);
+		}, 150);
 	}
 
 	//update with regex
@@ -222,15 +238,14 @@
 			re = null,
 			startIndex = 0;
 
-		if($(parent).is('script,noscript')){
-			return NodeFilter.FILER_REJECT;
-		}
-
 		re = new RegExp(input.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"),caseSensitive ? "": "i");
 
 		startIndex = data.search(re);
 
 		if(startIndex !== -1){
+			if($(parent).is('script,noscript') || !isVisible(node)){
+				return NodeFilter.FILER_REJECT;
+			}
 			resultsIndex.push(startIndex);
 			return NodeFilter.FILTER_ACCEPT;
 		} else {
