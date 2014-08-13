@@ -198,7 +198,10 @@
 			var i =0,
 				$parent,
 				startIndex,
-				_input;
+				_input,
+				href,
+				processedHref,
+				$closestAnchor;
 
 			while ((textNode = nodeIterator.nextNode()) != null) {
 
@@ -206,14 +209,22 @@
 				startIndex = resultsIndex[i];
 				_input = textNode.data.slice(startIndex, startIndex + length);
 
-				$li = $('<li role="menuitem" tabindex="0"></li>');
+				$li = $('<li role="menuitem" tabindex="0"><div class"li-inner">' + textNode.data + '</div></li>');
 
-				$li.text(textNode.data)
-					.html($li.html().replace(_input,'<span class="ts-ce-hl">' + _input + '</span>'))
+				$li.html($li.html().replace(_input,'<span class="ts-ce-hl">' + _input + '</span>'))
 					.data({
 						el: $parent,
 						textEl: textNode
 					});
+
+				$closestAnchor = $parent.closest('a');
+				if($closestAnchor.length > 0){
+					href = $closestAnchor.attr('href');
+					processedHref = linkMatch(href);
+					if(processedHref !== ''){
+						$li.append('<a href="' + href + '"' + ' title="'+ processedHref + '">' + processedHref + '</a>');	
+					}
+				}
 
 				if(i === 0){
 					$li.addClass('selected');
@@ -234,6 +245,16 @@
 			getSelected().trigger('click');
 
 		}, 150);
+	}
+
+	function linkMatch(href){
+		if(href.indexOf('http') === 0 || href.indexOf('ftp') === 0){
+			return href;
+		} else if(href[0] === '/'){
+			return location.origin + href;
+		} else {
+			return '';
+		}
 	}
 
 	//update with regex

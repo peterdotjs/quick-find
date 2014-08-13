@@ -119,6 +119,17 @@
 #text-search-extension ul li.selected {
   background: #d5f5ff;
 }
+#text-search-extension ul li a {
+  display: block;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 240px;
+  white-space: nowrap;
+}
+#text-search-extension ul li .li-inner {
+  display: inline-block;
+}
 .ts-ce-hl {
   background: orange !important;
 }
