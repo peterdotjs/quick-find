@@ -121,7 +121,8 @@
 
 		keydownHandlerLi = setTimeout(function(){
 			var $prev = null,
-				$next = null;
+				$next = null,
+				$link;
 
 			if(evt.which === 38){ //up
 				$prev = $this.prev();
@@ -136,7 +137,14 @@
 					$next.trigger('click').focus();
 				}
 			} else if(evt.which === 13){ //enter
-				$this.trigger('click').focus();
+				if($this.hasClass('selected')){
+					$link = $this.find('a');
+					if($link.length > 0){
+						location.href = $link.attr('href');
+					}
+				} else {
+					$this.trigger('click').focus();
+				}
 			}
 			return false;
 		},100);
@@ -157,7 +165,7 @@
 				$next = null,
 				$selected = getSelected();
 
-			if($selected.length > 0 && (evt.which === 38 || evt.which === 40)){
+			if($selected.length > 0){
 				if(evt.which === 38){ //up
 					$prev = $selected.prev();
 					if($prev.length > 0){
@@ -167,6 +175,11 @@
 					$next = $selected.next();
 					if($next.length > 0){
 						$next.trigger('click');
+					}
+				} else if(evt.which === 13){ //enter
+					$link = $selected.find('a');
+					if($link.length > 0){
+						location.href = $link.attr('href');
 					}
 				}
 				return false;
