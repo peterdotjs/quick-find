@@ -28,7 +28,7 @@
 
 		selectHandler = setTimeout(function(){
 			clearSelect($selected);
-			$this.addClass('selected');
+			$this.addClass('tse-selected');
 
 			var scrollTop = $this.offset().top - $resultSet.offset().top;
 
@@ -53,9 +53,11 @@
 
 			data.el.html(innerHTML.replace(textElData,newText));
 
-			$('html, body').animate({
-	          scrollTop: data.el.offset().top - 100
-	          },400);
+			// $('html, body').animate({
+	  //         scrollTop: data.el.offset().top - 100
+	  //         },400);
+
+			scrollToElement(data.el);
 
 		},100);
 	}
@@ -70,7 +72,7 @@
 
 			data.el.html(data.el.html().replace('<span class="ts-ce-hl">' + content + '</span>', content));
 
-			$selected.removeClass('selected');
+			$selected.removeClass('tse-selected');
 		}
 
 		$searchIndex.text(0);
@@ -91,7 +93,7 @@
 	}
 
 	function getSelected(){
-		return $('#text-search-extension li.selected');
+		return $displayEl.find('li.tse-selected');
 	}
 
 	//add settimeout
@@ -137,7 +139,7 @@
 					$next.trigger('click').focus();
 				}
 			} else if(evt.which === 13){ //enter
-				if($this.hasClass('selected')){
+				if($this.hasClass('tse-selected')){
 					$link = $this.find('a');
 					if($link.length > 0){
 						location.href = $link.attr('href');
@@ -171,25 +173,27 @@
 					if($prev.length > 0){
 						$prev.trigger('click');
 					}
+					return false;
 				} else if(evt.which === 40){ //down
 					$next = $selected.next();
 					if($next.length > 0){
 						$next.trigger('click');
 					}
+					return false;
 				} else if(evt.which === 13){ //enter
 					$link = $selected.find('a');
 					if($link.length > 0){
 						location.href = $link.attr('href');
 					}
+					return false;
 				}
-				return false;
 			}
 
 			var $li;
 
 			clearSelect();
 			$resultSet.html('');
-			$displayEl.addClass('no-results');
+			$displayEl.addClass('tse-no-results');
 
 			input = $this.val();
 
@@ -222,7 +226,7 @@
 				startIndex = resultsIndex[i];
 				_input = textNode.data.slice(startIndex, startIndex + length);
 
-				$li = $('<li role="menuitem" tabindex="0"><div class"li-inner">' + textNode.data + '</div></li>');
+				$li = $('<li role="menuitem" tabindex="0"><div class"tse-li-inner">' + textNode.data + '</div></li>');
 
 				$li.html($li.html().replace(_input,'<span class="ts-ce-hl">' + _input + '</span>'))
 					.data({
@@ -240,8 +244,8 @@
 				}
 
 				if(i === 0){
-					$li.addClass('selected');
-					$displayEl.removeClass('no-results');
+					$li.addClass('tse-selected');
+					$displayEl.removeClass('tse-no-results');
 				}
 
 				$resultSet.append($li);
@@ -261,12 +265,22 @@
 	}
 
 	function linkMatch(href){
-		if(href.indexOf('http') === 0 || href.indexOf('ftp') === 0){
+		if(href.indexOf('http') === 0 || href.indexOf('ftp') === 0 ||  (href.length > 1 && href.indexOf('#') === 0)){
 			return href;
 		} else if(href[0] === '/'){
 			return location.origin + href;
-		} else {
+		} else if(href.indexOf('javascript') === 0 || href  === '#'){
 			return '';
+		} else {
+			var pathName = location.pathname.split('/'),
+				pathNameEnd,	
+				length = pathName.length;
+			if(pathName[length-1] === ''){
+				return location.origin + location.pathname;
+			} else {
+				pathNameEnd = pathName.slice(0,length-1);
+				return location.origin + pathNameEnd.join('/') + '/' + href;
+			}
 		}
 	}
 
@@ -292,14 +306,54 @@
 		}
 	}
 
+	function scrollToElement($el){
+		var scrollElements = [$el],
+			$cur = $el.parent(),
+			element = null,
+			overflowX,
+			overflowY;
+
+		while($cur.length > 0 && !$cur.is('html, body')){
+			element = $cur[0];
+			overflowX = $cur.css('overflow-x');
+			overflowY = $cur.css('overflow-y');
+			if((element.offsetHeight < element.scrollHeight && (overflowY === 'auto' || overflowY === 'scroll')) || (element.offsetWidth < element.scrollWidth && (overflowX === 'auto' || overflowX === 'scroll'))){
+			   scrollElements.unshift($cur);
+			}
+			$cur = $cur.parent();
+		}
+		
+		var length = scrollElements.length,
+			index = 0,
+			$next,
+			position;
+
+		if(length <= 1){
+			$('html, body').animate({
+				scrollTop: $el.offset().top - 100,
+				scrolLeft: $el.offset().left - 100
+			},400)
+		} else {
+			for(;index<length-1;index++){
+				$cur = scrollElements[index];
+				$next = scrollElements[index+1];
+				//need to handle scroll width
+				$cur.animate({
+					scrollTop: $next.position().top - 100,
+					scrolLeft: $next.position().left - 100
+				},400)
+			}
+		}
+	}
+
 	function toggleMenu(){
 		$displayEl = $('#text-search-extension');
 		if($displayEl.length === 0){
-			$displayEl = $('<div id="text-search-extension" class="no-results"><div class="search-wrap"><div class="search-wrap-inner"><input type="text" id="search" placeholder="Find in page" autocomplete="off"></input><div class="search-index-wrap"><div class="search-index">0</div>of<div class="search-total">0</div></div></div><i tabindex="0"></i></div><ul role="menu"></ul></div>');
+			$displayEl = $('<div id="text-search-extension" class="tse-no-results"><div id="tse-search-wrap"><div id="tse-search-wrap-inner"><input type="text" id="tse-search" placeholder="Find in page" autocomplete="off"></input><div id="tse-search-index-wrap"><div id="tse-search-index">0</div>of<div id="tse-search-total">0</div></div></div><i tabindex="0"></i></div><ul role="menu"></ul></div>');
 			$('body').after($displayEl);
 			$resultSet = $displayEl.find('ul');
-			$searchIndex = $displayEl.find('.search-index');
-			$searchTotal = $displayEl.find('.search-total');
+			$searchIndex = $displayEl.find('#tse-search-index');
+			$searchTotal = $displayEl.find('#tse-search-total');
 			initSearchEvents();
 			$searchField = $displayEl.find('input');
 			if(window.getSelection){
@@ -307,8 +361,8 @@
 			}
 			$searchField.trigger('keydown').focus();
 		} else {
-			$displayEl.toggleClass('hide-text-search');
-			if(!$displayEl.hasClass('hide-text-search')){
+			$displayEl.toggleClass('tse-hide-text-search');
+			if(!$displayEl.hasClass('tse-hide-text-search')){
 				if(window.getSelection){
 					$searchField.val(window.getSelection().toString());
 				}
@@ -316,7 +370,7 @@
 			} else {
 				clearSelect();
 				$resultSet.html('');
-				$displayEl.addClass('no-results');
+				$displayEl.addClass('tse-no-results');
 			}
 		}
 	}
