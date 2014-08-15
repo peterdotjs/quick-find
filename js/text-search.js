@@ -35,7 +35,7 @@
 			if((scrollTop > 0  &&  scrollTop + $this.outerHeight() > $resultSet.height()) || scrollTop < 0 &&  scrollTop + $this.height() < $resultSet.outerHeight()){
 				$resultSet.animate({
 					scrollTop: $resultSet.scrollTop() + scrollTop
-				},400);
+				},400); 
 			}
 
 			if($resultSet.html() !== ''){
@@ -109,7 +109,8 @@
 	}
 
 	function initSearchEvents(){
-		 $displayEl.on('keydown','input', searchKeydownCb).on('click','i',toggleMenu);
+		 $displayEl.on('keydown','input', searchKeydownCb)
+		 .on('click','i',toggleMenu);			
 	}
 
 	function listItemKeydownCb(evt){
@@ -133,11 +134,13 @@
 				} else {
 					$searchField.focus();
 				}
+				return false;
 			} else if(evt.which === 40){ //down
 				$next = $this.next();
 				if($next.length > 0){
 					$next.trigger('click').focus();
 				}
+				return false;
 			} else if(evt.which === 13){ //enter
 				if($this.hasClass('tse-selected')){
 					$link = $this.find('a');
@@ -147,15 +150,14 @@
 				} else {
 					$this.trigger('click').focus();
 				}
+				return false;
 			}
-			return false;
 		},100);
 	}
 
 	function searchKeydownCb(evt){
 		evt.stopPropagation();
 		//check for invalid key inputs and return
-
 		if(keypressHandler){
 			clearTimeout(keypressHandler);
 		}
@@ -186,13 +188,18 @@
 						location.href = $link.attr('href');
 					}
 					return false;
-				}
+				} 
+			}
+
+			if(evt.which === 27){ //esc
+				toggleMenu();
+				return false;
 			}
 
 			var $li;
 
 			clearSelect();
-			$resultSet.html('');
+			$resultSet.empty();
 			$displayEl.addClass('tse-no-results');
 
 			input = $this.val();
@@ -236,7 +243,7 @@
 
 				$closestAnchor = $parent.closest('a');
 				if($closestAnchor.length > 0){
-					href = $closestAnchor.attr('href');
+					href = $closestAnchor.attr('href') || '';
 					processedHref = linkMatch(href);
 					if(processedHref !== ''){
 						$li.append('<a href="' + href + '"' + ' title="'+ processedHref + '">' + processedHref + '</a>');	
@@ -326,21 +333,26 @@
 		var length = scrollElements.length,
 			index = 0,
 			$next,
-			position;
+			position,
+			scrollTop;
 
 		if(length <= 1){
 			$('html, body').animate({
-				scrollTop: $el.offset().top - 100,
-				scrolLeft: $el.offset().left - 100
+				scrollTop: $el.offset().top - 200,
+				scrolLeft: $el.offset().left - 200
 			},400)
 		} else {
 			for(;index<length-1;index++){
 				$cur = scrollElements[index];
 				$next = scrollElements[index+1];
+
+				scrollTop = $next.offset().top - $cur.offset().top;
+				scrollLeft = $next.offset().left - $cur.offset().left;
+
 				//need to handle scroll width
 				$cur.animate({
-					scrollTop: $next.position().top - 100,
-					scrolLeft: $next.position().left - 100
+					scrollTop: $cur.scrollTop() + scrollTop - 100,
+					scrolLeft: $cur.scrollLeft() + scrollLeft - 100
 				},400)
 			}
 		}
@@ -369,7 +381,7 @@
 				$searchField.trigger('keydown').focus();
 			} else {
 				clearSelect();
-				$resultSet.html('');
+				$resultSet.empty();
 				$displayEl.addClass('tse-no-results');
 			}
 		}
