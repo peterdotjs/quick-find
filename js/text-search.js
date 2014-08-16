@@ -35,7 +35,7 @@
 			if((scrollTop > 0  &&  scrollTop + $this.outerHeight() > $resultSet.height()) || scrollTop < 0 &&  scrollTop + $this.height() < $resultSet.outerHeight()){
 				$resultSet.animate({
 					scrollTop: $resultSet.scrollTop() + scrollTop
-				},400); 
+				},400);
 			}
 
 			if($resultSet.html() !== ''){
@@ -110,7 +110,7 @@
 
 	function initSearchEvents(){
 		 $displayEl.on('keydown','input', searchKeydownCb)
-		 .on('click','i',toggleMenu);			
+		 .on('click','i',toggleMenu);
 	}
 
 	function listItemKeydownCb(evt){
@@ -167,6 +167,7 @@
 		keypressHandler = setTimeout(function(){
 			var $prev = null,
 				$next = null,
+				$link = null,
 				$selected = getSelected();
 
 			if($selected.length > 0){
@@ -188,7 +189,7 @@
 						location.href = $link.attr('href');
 					}
 					return false;
-				} 
+				}
 			}
 
 			if(evt.which === 27){ //esc
@@ -246,7 +247,7 @@
 					href = $closestAnchor.attr('href') || '';
 					processedHref = linkMatch(href);
 					if(processedHref !== ''){
-						$li.append('<a href="' + href + '"' + ' title="'+ processedHref + '">' + processedHref + '</a>');	
+						$li.append('<a href="' + href + '"' + ' title="'+ processedHref + '">' + processedHref + '</a>');
 					}
 				}
 
@@ -280,7 +281,7 @@
 			return '';
 		} else {
 			var pathName = location.pathname.split('/'),
-				pathNameEnd,	
+				pathNameEnd,
 				length = pathName.length;
 			if(pathName[length-1] === ''){
 				return location.origin + location.pathname;
@@ -329,18 +330,18 @@
 			}
 			$cur = $cur.parent();
 		}
-		
+
 		var length = scrollElements.length,
 			index = 0,
 			$next,
-			position,
-			scrollTop;
+			scrollTop,
+			scrollLeft;
 
 		if(length <= 1){
 			$('html, body').animate({
 				scrollTop: $el.offset().top - 200,
 				scrolLeft: $el.offset().left - 200
-			},400)
+			},400);
 		} else {
 			for(;index<length-1;index++){
 				$cur = scrollElements[index];
@@ -352,8 +353,8 @@
 				//need to handle scroll width
 				$cur.animate({
 					scrollTop: $cur.scrollTop() + scrollTop - 100,
-					scrolLeft: $cur.scrollLeft() + scrollLeft - 100
-				},400)
+					scrollLeft: $cur.scrollLeft() + scrollLeft - 100
+				},400);
 			}
 		}
 	}
