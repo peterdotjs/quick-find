@@ -138,6 +138,10 @@
 #text-search-extension ul li .tse-li-inner {
   display: inline-block;
 }
+#text-search-extension ul li.see-more-link {
+  text-align: center;
+  font-weight: bold;
+}
 .ts-ce-hl {
   background: orange !important;
 }
