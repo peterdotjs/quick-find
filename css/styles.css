@@ -162,5 +162,8 @@
   font-weight: bold;
 }
 .ts-ce-hl {
+  background: yellow !important;
+}
+.ts-ce-hl.ts-ce-hl-sel {
   background: orange !important;
 }

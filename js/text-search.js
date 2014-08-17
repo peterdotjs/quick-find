@@ -1,5 +1,3 @@
-//TODO: Cases
-//iframes, multiple documents
 (function($){
 
 	textSearch = {
@@ -34,7 +32,7 @@
 					$displayEl.find('#tse-links-only').addClass('tse-option-select');
 				} else if (evt.which === 191){ //disable links mode
 					textSearch.linksOnly = false;
-					$displayEl.find('#tse-links-only').removeClass('tse-option-select');					
+					$displayEl.find('#tse-links-only').removeClass('tse-option-select');
 				}
 				return false;
 			}
@@ -43,16 +41,16 @@
 
 	function initSearchEvents(){
 		 $searchField.on('keydown',function(evt){ //prevent cursor from moving
-		 	if(evt.which === 40 || evt.which === 38){
-		 		evt.preventDefault();
-		 	}
+			if(evt.which === 40 || evt.which === 38 || (evt.which === 65 && evt.altKey === true) || (evt.which === 67 && evt.altKey === true) || (evt.which === 76 && evt.altKey === true)){
+				evt.preventDefault();
+			}
 		 });
 		 $displayEl.on('keydown','input', searchKeydownCb)
 		 .on('click','i',toggleMenu)
 		 .on('click','li',selectCallback)
 		 .on('keydown','li',listItemKeydownCb)
-		 .on('click', '#tse-options span', function(evt){
-		 	optionsCb($(this));
+		 .on('click', '#tse-options span', function(){
+			optionsCb($(this));
 		 });
 	}
 
@@ -70,9 +68,9 @@
 			initMenu();
 		} else { //menu already initialized
 			$displayEl.toggleClass('tse-hide-text-search'); //show || hide
-			if(!$displayEl.hasClass('tse-hide-text-search')){ 
+			if(!$displayEl.hasClass('tse-hide-text-search')){
 				initMenu(); //init menu
-			} else { 
+			} else {
 				clearMenu(); //reset menu
 			}
 		}
@@ -88,9 +86,10 @@
 
 	function clearMenu(){
 		clearSelect();
+		removeHighlightAll();
 		updateSearchCounts(0,0);
 		$resultSet.empty();
-		$displayEl.addClass('tse-no-results');		
+		$displayEl.addClass('tse-no-results');
 	}
 
 	function optionsCb($el){
@@ -109,7 +108,7 @@
 			default:
 				break;
 		}
-		$searchField.trigger('keydown').focus(); 
+		$searchField.trigger('keydown').focus();
 	}
 
 	function searchKeydownCb(evt){
@@ -184,14 +183,8 @@
 				updateSearchCounts($this.index() + 1,null);
 			}
 
-			var startIndex = textSearch.resultsIndex[$this.index()];
-			//ensure modifying correct input if inputQuery occurs elsewhere in parent html.
-			var textElData = data.textEl.data,
-				input = textElData.slice(startIndex, startIndex + $searchField.val().length),
-				newText = textElData.slice().replace(input,'<span class="ts-ce-hl">' + input + '</span>'),
-				innerHTML = data.el.html();
+			highlightSelected($this.index(),data,'selected');
 
-			data.el.html(innerHTML.replace(textElData,newText));
 			utility.scrollToElement(data.el, function(){
 				var $el = $('body').find('span.ts-ce-hl');
 				if($el.length > 0 && $el.offset().left + $el.width() > $(window).width() - 310 && $el.offset().top < $displayEl.offset().top + $displayEl.height()){
@@ -213,12 +206,12 @@
 		var nodeIterator = document.createNodeIterator(document.body, NodeFilter.SHOW_TEXT,utility.textMatch);
 		resetNodeIterator();
 		searchHelper(nodeIterator);
-		getSelected().trigger('click');		
+		getSelected().trigger('click');
 	}
 
 	function resetNodeIterator(){
 		textSearch.nodeIteratorIndex = 0;
-		textSearch.nodeIteratorPlaceholder = null;		
+		textSearch.nodeIteratorPlaceholder = null;
 	}
 
 	function searchHelper(nodeIterator){
@@ -267,7 +260,7 @@
 			}
 
 			$resultSet.append($li);
-			
+
 			i++;
 			textSearch.nodeIteratorIndex++;
 
@@ -278,11 +271,13 @@
 				textSearch.nodeIteratorPlaceholder = nodeIterator;
 				seeMoreLink = true;
 				break;
-			} 
+			}
 
 		}
 
-		//highlightAll();
+		if(textSearch.highlightAll){
+			highlightAll();
+		}
 
 		if(!seeMoreLink){
 			updateSearchCounts(null,$resultSet.children().length);
@@ -318,11 +313,18 @@
 							$next.focus();
 						}
 					}
-					return false;				
+					return false;
 				case 13: //enter
 					$link = $selected.find('a');
 					if($link.length > 0){
-						location.href = $link.attr('href');
+						if(evt.shiftKey === true){
+							$link.attr('target','_blank');
+							$link.trigger('click');
+							$link.attr('target','_blank');
+						} else {
+							location.href = $link.attr('href');
+						}
+
 					} else if(type === 'li'){
 						$selected.trigger('click').focus();
 					}
@@ -336,7 +338,6 @@
 			case 27: //esc
 				toggleMenu();
 				return false;
-				break;
 			case 65: //a - highlight all
 				if(evt.altKey === true){
 					optionsCb($displayEl.find('#tse-highlight-all'));
@@ -346,7 +347,7 @@
 			case 67: //c - match case
 				if(evt.altKey === true){
 					optionsCb($displayEl.find('#tse-match-case'));
-					return false;	
+					return false;
 				}
 				break;
 			case 76: //l - links only
@@ -364,10 +365,22 @@
 		var $selected = $el || getSelected();
 		if($selected.length > 0){
 			var data = $selected.data(),
-				highlights = data.el.find('.ts-ce-hl'),
-				content = highlights.eq(0).text();
+				highlights = data.el.find('span.ts-ce-hl'),
+				content = highlights.eq(0).text(),
+				re;
 
-			data.el.html(data.el.html().replace('<span class="ts-ce-hl">' + content + '</span>', content));
+			if(!highlights.hasClass('ts-ce-hl-sel')){
+				re = new RegExp('<span class="ts-ce-hl">' + content + '</span>','g');
+				data.el.html(data.el.html().replace(re, content));
+			} else {
+				if(!textSearch.highlightAll){
+					re = new RegExp('<span class="ts-ce-hl ts-ce-hl-sel">' + content + '</span>','g');
+					data.el.html(data.el.html().replace(re, content));
+				} else {
+					highlights.removeClass('ts-ce-hl-sel');
+				}
+			}
+
 			$selected.removeClass('tse-selected');
 		}
 	}
@@ -382,14 +395,60 @@
 		}
 
 		if(total !== null){
-			$searchTotal.text(total);	
-		}	
+			$searchTotal.text(total);
+		}
 	}
 
+	//highlighting one item
+	function highlightSelected(index,data,selected){
+
+		if(textSearch.highlightAll && selected){
+			curHighlightDiv = data.el.find('.ts-ce-hl');
+			if(curHighlightDiv.length > 0){
+				curHighlightDiv.addClass('ts-ce-hl-sel');
+				return;
+			}
+		}
+
+		var startIndex = textSearch.resultsIndex[index];
+		//ensure modifying correct input if inputQuery occurs elsewhere in parent html.
+		var textElData = data.textEl.data,
+			input = textElData.slice(startIndex, startIndex + $searchField.val().length),
+			highlightDiv = selected ? '<span class="ts-ce-hl ts-ce-hl-sel">' : '<span class="ts-ce-hl">',
+			newText = textElData.slice().replace(input, highlightDiv + input + '</span>'),
+			innerHTML = data.el.html(),
+			curHighlightDiv;
+
+		data.el.html(innerHTML.replace(textElData,newText));
+	}
+
+	//remove highlight on all items
+	function removeHighlightAll(){
+		var items = $('body').find('span.ts-ce-hl'),
+			length = items.length,
+			index = 0,
+			content,
+			$curItem,
+			$parent,
+			re;
+
+		for(;index<length;index++){
+			$curItem = $(items[index]);
+			content = $curItem.text();
+			$parent = $curItem.parent();
+			if($parent.length > 0){
+				re = new RegExp('<span class="ts-ce-hl">' + content + '</span>','g');
+				$parent.html($parent.html().replace(re, content));
+			}
+		}
+	}
+
+	//add highlight to all items
 	function highlightAll(){
 		var items = $resultSet.find('li'),
 			length,
-			index;
+			index = 0,
+			$curItem;
 
 		items = items.filter(function(){
 			var $this = $(this);
@@ -399,8 +458,9 @@
 		length = items.length;
 
 		for(;index<length;index++){
-			items[index].addClass('tse-hl');
-
+			$curItem = $(items[index]);
+			$curItem.addClass('tse-hl');
+			highlightSelected($curItem.index(),$curItem.data());
 		}
 	}
 
