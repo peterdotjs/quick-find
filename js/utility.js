@@ -44,7 +44,7 @@
 			}
 		},
 
-		scrollToElement: function($el){
+		scrollToElement: function($el,cb){
 			var scrollElements = [$el],
 				$cur = $el.parent(),
 				element = null,
@@ -71,7 +71,7 @@
 				$('html, body').animate({
 					scrollTop: $el.offset().top - 200,
 					scrolLeft: $el.offset().left - 200
-				},400);
+				},400,cb);
 			} else {
 				for(;index<length-1;index++){
 					$cur = scrollElements[index];
@@ -80,11 +80,18 @@
 					scrollTop = $next.offset().top - $cur.offset().top;
 					scrollLeft = $next.offset().left - $cur.offset().left;
 
-					//need to handle scroll width
-					$cur.animate({
-						scrollTop: $cur.scrollTop() + scrollTop - 100,
-						scrollLeft: $cur.scrollLeft() + scrollLeft - 100
-					},400);
+					if(index == length-2){
+						$cur.animate({
+							scrollTop: $cur.scrollTop() + scrollTop - 100,
+							scrollLeft: $cur.scrollLeft() + scrollLeft - 100
+						},400,cb);
+					} else{
+						$cur.animate({
+							scrollTop: $cur.scrollTop() + scrollTop - 100,
+							scrollLeft: $cur.scrollLeft() + scrollLeft - 100
+						},400);						
+					}
+
 				}
 			}
 		},

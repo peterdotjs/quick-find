@@ -161,7 +161,19 @@
 				innerHTML = data.el.html();
 
 			data.el.html(innerHTML.replace(textElData,newText));
-			utility.scrollToElement(data.el);
+			utility.scrollToElement(data.el, function(){
+				var $el = $('body').find('span.ts-ce-hl');
+				if($el.length > 0 && $el.offset().left + $el.width() > $(window).width() - 295 && $el.offset().top < $displayEl.offset().top + $displayEl.height()){
+					var offsetLeft = $(window).width() - $el.offset().left + 20;
+					$displayEl.animate({
+						right: offsetLeft
+					},400);
+				} else {
+					$displayEl.animate({
+						right: 3
+					},400);
+				}
+			});
 
 		},100);
 	}
