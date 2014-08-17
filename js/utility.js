@@ -9,12 +9,12 @@
 				re = null,
 				startIndex = 0;
 
-			re = new RegExp(textSearch.input.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"),textSearch.caseSensitive ? "": "i");
+			re = new RegExp(textSearch.input.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"),textSearch.matchCase ? "": "i");
 
 			startIndex = data.search(re);
 
 			if(startIndex !== -1){
-				if($(parent).is('script,noscript') || !isVisible(node)){
+				if($(parent).is('script,noscript') || !isVisible(node) || !linkCheck(node)){
 					return NodeFilter.FILER_REJECT;
 				}
 				textSearch.resultsIndex.push(startIndex);
@@ -117,6 +117,21 @@
 	    element = element.parentNode;
 	  }
 	  return true;
+	}
+
+	function linkCheck(element){
+		if(textSearch.linksOnly){
+		  while (element) {
+		  	debugger;
+		    if (element.nodeName === 'A'){
+				return true;
+		    }
+		    element = element.parentNode;
+		  }	
+		  return false;		
+		} else {
+			return true;
+		}
 	}
 
 	window.utility = utility;

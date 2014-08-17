@@ -3,7 +3,7 @@
 	&.tse-no-results {
 		padding-bottom: 0px;
 
-		#tse-search-wrap {
+		#tse-options {
 			border-bottom: 0px;
 		}
 
@@ -15,7 +15,7 @@
 	position: fixed;
 	top: 0;
 	right: 3px;
-	width: 290px;
+	width: 305px;
 	z-index: 1000000;
 	overflow: hidden;
 	border-radius: 0px 0px 3px 3px;
@@ -30,7 +30,6 @@
 
 	#tse-search-wrap {
 		padding: 0px 0px 5px 5px;
-		border-bottom: 1px solid silver;
 
 		#tse-search-wrap-inner {
 
@@ -38,7 +37,7 @@
 			position: relative;
 
 			input {
-				width: 261px;
+				width: 276px;
 				height: 28px;
 				vertical-align: top;
 				font-size: 16px;
@@ -103,6 +102,30 @@
 		}
 	}
 
+	#tse-options {
+		padding-bottom: 5px;
+		border-bottom: 1px solid silver;
+
+		span {
+			cursor: pointer;
+			margin-left: 12px;
+			border: 1px solid transparent;
+			border-radius: 3px;
+			padding: 2px 4px;
+			display: inline-block;
+			font-size: 12px;
+
+			&:hover {
+				border-color: grey;
+			}
+
+			&.tse-option-select {
+				border-color: grey;
+				background-color: silver;
+			}
+		}
+	}
+
 	ul {
 		margin: 0px;
 		padding: 0px 10px;
@@ -159,7 +182,7 @@
 				display: inline-block;
 			}
 
-			&.see-more-link {
+			&.tse-see-more-link {
 				text-align: center;
 				font-weight: bold;
 			}

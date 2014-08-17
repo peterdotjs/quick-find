@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   right: 3px;
-  width: 290px;
+  width: 305px;
   z-index: 1000000;
   overflow: hidden;
   border-radius: 0px 0px 3px 3px;
@@ -14,7 +14,7 @@
 #text-search-extension.tse-no-results {
   padding-bottom: 0px;
 }
-#text-search-extension.tse-no-results #tse-search-wrap {
+#text-search-extension.tse-no-results #tse-options {
   border-bottom: 0px;
 }
 #text-search-extension.tse-no-results ul {
@@ -25,14 +25,13 @@
 }
 #text-search-extension #tse-search-wrap {
   padding: 0px 0px 5px 5px;
-  border-bottom: 1px solid silver;
 }
 #text-search-extension #tse-search-wrap #tse-search-wrap-inner {
   display: inline-block;
   position: relative;
 }
 #text-search-extension #tse-search-wrap #tse-search-wrap-inner input {
-  width: 261px;
+  width: 276px;
   height: 28px;
   vertical-align: top;
   font-size: 16px;
@@ -89,6 +88,26 @@
 #text-search-extension #tse-search-wrap i:after {
   content: '×';
 }
+#text-search-extension #tse-options {
+  padding-bottom: 5px;
+  border-bottom: 1px solid silver;
+}
+#text-search-extension #tse-options span {
+  cursor: pointer;
+  margin-left: 12px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 2px 4px;
+  display: inline-block;
+  font-size: 12px;
+}
+#text-search-extension #tse-options span:hover {
+  border-color: grey;
+}
+#text-search-extension #tse-options span.tse-option-select {
+  border-color: grey;
+  background-color: silver;
+}
 #text-search-extension ul {
   margin: 0px;
   padding: 0px 10px;
@@ -138,7 +157,7 @@
 #text-search-extension ul li .tse-li-inner {
   display: inline-block;
 }
-#text-search-extension ul li.see-more-link {
+#text-search-extension ul li.tse-see-more-link {
   text-align: center;
   font-weight: bold;
 }

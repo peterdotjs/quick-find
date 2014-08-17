@@ -8,7 +8,9 @@
 		resultLimit: 500,
 		nodeIteratorPlaceholder: null,
 		nodeIteratorIndex: 0,
-		caseSensitive: false
+		matchCase: false,
+		linksOnly: false,
+		highlightAll: false
 	};
 
 	var	$displayEl = null,
@@ -25,8 +27,15 @@
 	//add settimeout
 	function initDocEvents(doc){
 		$(doc).on('keydown',function(evt){
-			if((evt.which === 191 || evt.which === 222 || (evt.which === 70 && evt.altKey === true)) && $(evt.target).is('body')){
+			if((evt.which === 191 || evt.which === 222 || (evt.which === 70 && evt.ctrlKey === true && evt.shiftKey === true)) && $(evt.target).is('body')){
 				toggleMenu();
+				if(evt.which === 222){ //enable links mode
+					textSearch.linksOnly = true;
+					$displayEl.find('#tse-links-only').addClass('tse-option-select');
+				} else if (evt.which === 191){ //disable links mode
+					textSearch.linksOnly = false;
+					$displayEl.find('#tse-links-only').removeClass('tse-option-select');					
+				}
 				return false;
 			}
 		});
@@ -41,14 +50,17 @@
 		 $displayEl.on('keydown','input', searchKeydownCb)
 		 .on('click','i',toggleMenu)
 		 .on('click','li',selectCallback)
-		 .on('keydown','li',listItemKeydownCb);
+		 .on('keydown','li',listItemKeydownCb)
+		 .on('click', '#tse-options span', function(evt){
+		 	optionsCb($(this));
+		 });
 	}
 
 	//handles menu toggle on target page
 	function toggleMenu(){
 		$displayEl = $('#text-search-extension');
 		if($displayEl.length === 0){ //menu has not been initialized
-			$displayEl = $('<div id="text-search-extension" class="tse-no-results"><div id="tse-search-wrap"><div id="tse-search-wrap-inner"><input type="text" id="tse-search" placeholder="Find in page" autocomplete="off"></input><div id="tse-search-index-wrap"><div id="tse-search-index">0</div>of<div id="tse-search-total">0</div></div></div><i tabindex="0"></i></div><ul role="menu"></ul></div>');
+			$displayEl = $('<div id="text-search-extension" class="tse-no-results"><div id="tse-search-wrap"><div id="tse-search-wrap-inner"><input type="text" id="tse-search" placeholder="Find in page" autocomplete="off"></input><div id="tse-search-index-wrap"><div id="tse-search-index">0</div>of<div id="tse-search-total">0</div></div></div><i tabindex="0"></i></div><div id="tse-options"><span id="tse-match-case">Match <u>C</u>ase</span><span id="tse-links-only"><u>L</u>inks Only</span><span id="tse-highlight-all">Highlight <u>A</u>ll</span></div><ul role="menu"></ul></div>');
 			$('body').after($displayEl);
 			$resultSet = $displayEl.find('ul');
 			$searchIndex = $displayEl.find('#tse-search-index');
@@ -79,6 +91,25 @@
 		updateSearchCounts(0,0);
 		$resultSet.empty();
 		$displayEl.addClass('tse-no-results');		
+	}
+
+	function optionsCb($el){
+		var id = $el.attr('id');
+		$el.toggleClass('tse-option-select');
+		switch (id) {
+			case "tse-match-case":
+				textSearch.matchCase = textSearch.matchCase ? false : true; //toggle
+				break;
+			case "tse-links-only":
+				textSearch.linksOnly = textSearch.linksOnly ? false : true; //toggle
+				break;
+			case "tse-highlight-all":
+				textSearch.highlightAll = textSearch.highlightAll ? false : true; //toggle
+				break;
+			default:
+				break;
+		}
+		$searchField.trigger('keydown').focus(); 
 	}
 
 	function searchKeydownCb(evt){
@@ -131,7 +162,7 @@
 
 		selectHandler = setTimeout(function(){
 
-			if($this.hasClass('see-more-link')){
+			if($this.hasClass('tse-see-more-link')){
 				$this.remove();
 				searchHelper();
 				return false;
@@ -163,10 +194,10 @@
 			data.el.html(innerHTML.replace(textElData,newText));
 			utility.scrollToElement(data.el, function(){
 				var $el = $('body').find('span.ts-ce-hl');
-				if($el.length > 0 && $el.offset().left + $el.width() > $(window).width() - 295 && $el.offset().top < $displayEl.offset().top + $displayEl.height()){
+				if($el.length > 0 && $el.offset().left + $el.width() > $(window).width() - 310 && $el.offset().top < $displayEl.offset().top + $displayEl.height()){
 					var offsetLeft = $(window).width() - $el.offset().left + 20;
 					$displayEl.animate({
-						right: offsetLeft
+						right: (offsetLeft > $(window).width() || offsetLeft < 0) ? 3 : offsetLeft
 					},400);
 				} else {
 					$displayEl.animate({
@@ -243,13 +274,15 @@
 			if(i === textSearch.resultLimit ){
 				//add see more li
 				updateSearchCounts(null,$resultSet.children().length + '+');
-				$resultSet.append('<li class="see-more-link" role="menuitem" tabindex="0">See more results</li>');
+				$resultSet.append('<li class="tse-see-more-link" role="menuitem" tabindex="0">See more results</li>');
 				textSearch.nodeIteratorPlaceholder = nodeIterator;
 				seeMoreLink = true;
 				break;
 			} 
 
 		}
+
+		//highlightAll();
 
 		if(!seeMoreLink){
 			updateSearchCounts(null,$resultSet.children().length);
@@ -265,40 +298,65 @@
 			$selected = $el || getSelected();
 
 		if($selected.length > 0){
-			if(evt.which === 38){ //up
-				$prev = $selected.prev();
-				if($prev.length > 0){
-					$prev.trigger('click');
-					if(type === 'li'){
-						$prev.focus();
+			switch (evt.which){
+				case 38:  //up
+					$prev = $selected.prev();
+					if($prev.length > 0){
+						$prev.trigger('click');
+						if(type === 'li'){
+							$prev.focus();
+						}
+					} else if(type === 'li'){
+						$searchField.focus();
 					}
-				} else if(type === 'li'){
-					$searchField.focus();
-				}
-				return false;
-			} else if(evt.which === 40){ //down
-				$next = $selected.next();
-				if($next.length > 0){
-					$next.trigger('click');
-					if(type === 'li'){
-						$next.focus();
+					return false;
+				case 40: //down
+					$next = $selected.next();
+					if($next.length > 0){
+						$next.trigger('click');
+						if(type === 'li'){
+							$next.focus();
+						}
 					}
-				}
-				return false;
-			} else if(evt.which === 13){ //enter
-				$link = $selected.find('a');
-				if($link.length > 0){
-					location.href = $link.attr('href');
-				} else if(type === 'li'){
-					$selected.trigger('click').focus();
-				}
-				return false;
+					return false;				
+				case 13: //enter
+					$link = $selected.find('a');
+					if($link.length > 0){
+						location.href = $link.attr('href');
+					} else if(type === 'li'){
+						$selected.trigger('click').focus();
+					}
+					return false;
+				default:
+					break;
 			}
 		}
 
-		if(evt.which === 27){ //esc
-			toggleMenu();
-			return false;
+		switch (evt.which){
+			case 27: //esc
+				toggleMenu();
+				return false;
+				break;
+			case 65: //a - highlight all
+				if(evt.altKey === true){
+					optionsCb($displayEl.find('#tse-highlight-all'));
+					return false;
+				}
+				break;
+			case 67: //c - match case
+				if(evt.altKey === true){
+					optionsCb($displayEl.find('#tse-match-case'));
+					return false;	
+				}
+				break;
+			case 76: //l - links only
+				if(evt.altKey === true){
+					optionsCb($displayEl.find('#tse-links-only'));
+					return false;
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -326,6 +384,24 @@
 		if(total !== null){
 			$searchTotal.text(total);	
 		}	
+	}
+
+	function highlightAll(){
+		var items = $resultSet.find('li'),
+			length,
+			index;
+
+		items = items.filter(function(){
+			var $this = $(this);
+			return !$this.hasClass('tse-hl') && !$this.hasClass('tse-see-more-link');
+		});
+
+		length = items.length;
+
+		for(;index<length;index++){
+			items[index].addClass('tse-hl');
+
+		}
 	}
 
 })(window.jQuery);
