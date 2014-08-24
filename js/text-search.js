@@ -133,6 +133,7 @@
 			clearMenu();
 			textSearch.input = $this.val();
 			if(textSearch.input.trim() === ''){
+					resetDisplayPosition();
 				return;
 			}
 			textSearch.resultsIndex = [];
@@ -198,13 +199,17 @@
 						right: (offsetLeft > $(window).width() || offsetLeft < 0) ? 15 : offsetLeft
 					},400);
 				} else {
-					$displayEl.animate({
-						right: 15
-					},400);
+					resetDisplayPosition();
 				}
 			});
 
 		},100);
+	}
+
+	function resetDisplayPosition(){
+		$displayEl.animate({
+			right: 15
+		},400);
 	}
 
 	function processSearch(){
