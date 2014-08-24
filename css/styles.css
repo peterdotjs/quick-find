@@ -79,11 +79,11 @@
   vertical-align: top;
   cursor: pointer;
   background: url("chrome-extension://kfjdfgmmiadhkdmjhldelcfhjmnglhmd/images/sprites/close.png") no-repeat;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   position: relative;
-  top: 4px;
-  left: 2px;
+  top: 5px;
+  left: 3px;
 }
 #text-search-extension #tse-search-wrap i:hover,
 #text-search-extension #tse-search-wrap i:focus {
