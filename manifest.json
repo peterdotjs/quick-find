@@ -1,9 +1,9 @@
 {
-  "name": "Quick Find - Text Search",
+  "name": "Quick Find - next gen text search",
   "short_name": "Quick Find",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "manifest_version": 2,
-  "description": "Text search made easy",
+  "description": "Port of Firefox Quick Find features + awesome new ones. Search results in one location. Navigate to links in just a few keystrokes.",
   "icons": { "16": "images/icons/icon16.png",
          "48": "images/icons/icon48.png",
         "128": "images/icons/icon128.png" },
@@ -17,6 +17,7 @@
    } ],
   "offline_enabled": true,
   "web_accessible_resources": [
-    "fonts/*"
+    "fonts/*",
+    "images/sprites*"
   ]
 }

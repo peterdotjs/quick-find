@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Noto Sans';
-  src: url('chrome-extension://dejblhmebonldngnmeidliaifgiagcjj/fonts/NotoSans-regular-webfont.woff') format('woff'), url('chrome-extension://dejblhmebonldngnmeidliaifgiagcjj/fonts/NotoSans-regular-webfont.ttf') format('truetype');
+  src: url('chrome-extension://kfjdfgmmiadhkdmjhldelcfhjmnglhmd/fonts/NotoSans-regular-webfont.woff') format('woff'), url('chrome-extension://kfjdfgmmiadhkdmjhldelcfhjmnglhmd/fonts/NotoSans-regular-webfont.ttf') format('truetype');
 }
 #text-search-extension {
   line-height: 1.4;
@@ -57,7 +57,7 @@
 }
 #text-search-extension #tse-search-wrap #tse-search-wrap-inner #tse-search-index-wrap {
   position: absolute;
-  top: 8px;
+  top: 7px;
   right: 0px;
   margin: 0px 5px;
   color: #b4b4b4;
@@ -75,31 +75,19 @@
 }
 #text-search-extension #tse-search-wrap i {
   display: inline-block;
-  color: #777;
-  border-radius: 50%;
-  background: transparent;
-  border: 1px solid transparent;
-  padding: 0px 3px 1px 4px;
+  box-sizing: border-box;
+  vertical-align: top;
+  cursor: pointer;
+  background: url("chrome-extension://kfjdfgmmiadhkdmjhldelcfhjmnglhmd/images/sprites/close.png") no-repeat;
+  width: 20px;
+  height: 20px;
   position: relative;
   top: 4px;
   left: 2px;
-  width: 19px;
-  line-height: 16px;
-  font-size: 16px;
-  height: 19px;
-  box-sizing: border-box;
-  font-family: Times;
-  font-style: normal;
-  vertical-align: top;
-  cursor: pointer;
 }
 #text-search-extension #tse-search-wrap i:hover,
 #text-search-extension #tse-search-wrap i:focus {
-  color: white;
-  background: salmon;
-}
-#text-search-extension #tse-search-wrap i:after {
-  content: '×';
+  background: url("chrome-extension://kfjdfgmmiadhkdmjhldelcfhjmnglhmd/images/sprites/close_hover.png") no-repeat;
 }
 #text-search-extension #tse-options {
   padding-bottom: 5px;
