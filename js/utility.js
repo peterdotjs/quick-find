@@ -14,7 +14,7 @@
 			startIndex = data.search(re);
 
 			if(startIndex !== -1){
-				if($(parent).is('script,noscript') || !isVisible(node) || !linkCheck(node)){
+				if($(parent).is('script,noscript,code') || !isVisible(node) || !linkCheck(node)){
 					return NodeFilter.FILER_REJECT;
 				}
 				textSearch.resultsIndex.push(startIndex);
@@ -89,7 +89,7 @@
 						$cur.animate({
 							scrollTop: $cur.scrollTop() + scrollTop - 100,
 							scrollLeft: $cur.scrollLeft() + scrollLeft - 100
-						},400);						
+						},400);
 					}
 
 				}
@@ -103,6 +103,10 @@
 		            .replace(/'/g, '&#39;')
 		            .replace(/</g, '&lt;')
 		            .replace(/>/g, '&gt;');
+		},
+
+		regexEscape: function(str) {
+			return (str+'').replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 		}
 
 	};
@@ -127,8 +131,8 @@
 				return true;
 		    }
 		    element = element.parentNode;
-		  }	
-		  return false;		
+		  }
+		  return false;
 		} else {
 			return true;
 		}

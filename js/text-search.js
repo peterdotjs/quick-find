@@ -35,6 +35,11 @@
 					$displayEl.find('#tse-links-only').removeClass('tse-option-select');
 				}
 				return false;
+			} else if (evt.which === 27 && $(evt.target).is('body')){
+				if($displayEl && $displayEl.length > 0){
+					$displayEl.addClass('tse-hide-text-search');
+					clearMenu();
+				}
 			}
 		});
 	}
@@ -190,11 +195,11 @@
 				if($el.length > 0 && $el.offset().left + $el.width() > $(window).width() - 310 && $el.offset().top < $displayEl.offset().top + $displayEl.height()){
 					var offsetLeft = $(window).width() - $el.offset().left + 20;
 					$displayEl.animate({
-						right: (offsetLeft > $(window).width() || offsetLeft < 0) ? 3 : offsetLeft
+						right: (offsetLeft > $(window).width() || offsetLeft < 0) ? 15 : offsetLeft
 					},400);
 				} else {
 					$displayEl.animate({
-						right: 3
+						right: 15
 					},400);
 				}
 			});
@@ -370,11 +375,11 @@
 				re;
 
 			if(!highlights.hasClass('ts-ce-hl-sel')){
-				re = new RegExp('<span class="ts-ce-hl">' + content + '</span>','g');
+				re = new RegExp('<span class="ts-ce-hl">' + utility.regexEscape(content) + '</span>','g');
 				data.el.html(data.el.html().replace(re, content));
 			} else {
 				if(!textSearch.highlightAll){
-					re = new RegExp('<span class="ts-ce-hl ts-ce-hl-sel">' + content + '</span>','g');
+					re = new RegExp('<span class="ts-ce-hl ts-ce-hl-sel">' + utility.regexEscape(content) + '</span>','g');
 					data.el.html(data.el.html().replace(re, content));
 				} else {
 					highlights.removeClass('ts-ce-hl-sel');
@@ -437,7 +442,7 @@
 			content = $curItem.text();
 			$parent = $curItem.parent();
 			if($parent.length > 0){
-				re = new RegExp('<span class="ts-ce-hl">' + content + '</span>','g');
+				re = new RegExp('<span class="ts-ce-hl">' + utility.regexEscape(content) + '</span>','g');
 				$parent.html($parent.html().replace(re, content));
 			}
 		}

@@ -1,4 +1,23 @@
+
+//** Load fonts from this directory.
+@icon-font-path:          "chrome-extension://lnogaffcoinimphncjimjlphfpekmmop/fonts/";
+@icon-font-name:          "NotoSans-regular-webfont";
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('@{icon-font-path}@{icon-font-name}.woff') format('woff'),
+       url('@{icon-font-path}@{icon-font-name}.ttf') format('truetype');
+}
+
 #text-search-extension {
+	line-height: 1.4;
+	font-family: 'Noto Sans', sans-serif;
+
+	*, *::after, *::before {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
 
 	&.tse-no-results {
 		padding-bottom: 0px;
@@ -14,9 +33,9 @@
 
 	position: fixed;
 	top: 0;
-	right: 3px;
+	right: 15px;
 	width: 305px;
-	z-index: 1000000;
+	z-index: 2147483647;
 	overflow: hidden;
 	border-radius: 0px 0px 3px 3px;
 	background: rgb(236, 236, 236);
@@ -46,7 +65,7 @@
 				margin: 0px;
 				border: 1px solid silver;
 				box-sizing: border-box;
-				font-family: 'Lucida Grande';
+				font-family: 'Noto Sans', sans-serif;
 			}
 
 			#tse-search-index-wrap {
@@ -57,7 +76,7 @@
 				color: rgb(180, 180, 180);
 				font-size: 14px;
 				line-height: 14px;
-				font-family: 'Lucida Grande';
+				font-family: 'Noto Sans', sans-serif;
 
 				#tse-search-index {
 					display: inline-block;
@@ -131,7 +150,7 @@
 		padding: 0px 10px;
 		overflow-y: auto;
 		overflow-x: hidden;
-		max-height: 350px;
+		max-height: 300px;
 		border-bottom: 1px solid silver;
 
 		li {
@@ -143,6 +162,7 @@
 			word-wrap: break-word;
 			border: 1px solid grey;
 			border-bottom: 0px;
+			font-family: 'Noto Sans', sans-serif;
 
 			&:first-child {
 				border-top: 0px;
@@ -176,10 +196,13 @@
 				border: 1px solid transparent;
 				padding: 2px 4px;
 				margin-top: 4px;
+				color: #4472b9;
+				font-family: 'Noto Sans', sans-serif;
 			}
 
 			.tse-li-inner {
 				display: inline-block;
+				font-size: 15px;
 			}
 
 			&.tse-see-more-link {

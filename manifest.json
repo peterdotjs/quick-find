@@ -22,5 +22,9 @@
       "css": ["css/styles.css"],
       "matches": [ "http://*/*", "https://*/*", "ftp://*/*" ]
    } ],
-  "offline_enabled": true
+  "offline_enabled": true,
+  "web_accessible_resources": [
+    "fonts/*.ttf",
+    "fonts/*.woff"
+  ]
 }
