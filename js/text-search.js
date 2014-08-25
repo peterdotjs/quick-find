@@ -22,6 +22,10 @@
 
 	initDocEvents(document);
 
+	function initTracking(){
+		chrome.runtime.sendMessage({method: "logPageView"});
+	}
+
 	//add settimeout
 	function initDocEvents(doc){
 		$(doc).on('keydown',function(evt){
@@ -71,6 +75,7 @@
 			$searchField = $displayEl.find('input');
 			initSearchEvents();
 			initMenu();
+			initTracking();
 		} else { //menu already initialized
 			$displayEl.toggleClass('tse-hide-text-search'); //show || hide
 			if(!$displayEl.hasClass('tse-hide-text-search')){

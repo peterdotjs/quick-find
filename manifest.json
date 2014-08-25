@@ -1,7 +1,7 @@
 {
   "name": "Quick Find - next gen text search",
   "short_name": "Quick Find",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "manifest_version": 2,
   "description": "Port of Firefox Quick Find features + awesome new ones. Search results in one location. Navigate to links in just a few keystrokes.",
   "icons": { "16": "images/icons/icon16.png",
@@ -19,5 +19,7 @@
   "web_accessible_resources": [
     "fonts/*",
     "images/sprites*"
-  ]
+  ],
+  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
+  "options_page": "options.html"
 }
