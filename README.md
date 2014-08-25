@@ -17,7 +17,7 @@ A next gen text search tool for your Chrome web page. Start a search and simply 
 
 <br>
 ###Demo:
-<iframe width="853" height="480" src="http://www.youtube.com/embed/x2PEyTyJ6iM?" frameborder="0" allowfullscreen></iframe>
+https://www.youtube.com/watch?v=x2PEyTyJ6iM
 
 <br>
 ###Shortcut keys:
