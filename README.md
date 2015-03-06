@@ -5,7 +5,7 @@ Next gen text search for opera
 
 Chrome web store: https://chrome.google.com/webstore/detail/quick-find-next-gen-text/dejblhmebonldngnmeidliaifgiagcjj
 
-Opera web store: https://addons.opera.com/en/extensions/details/quick-find-for-opera/?display=en
+Opera web store: https://addons.opera.com/en/extensions/details/quick-find-for-operatm/?display=en
 
 Port of Firefox Quick Find features + awesome new ones. Search results in one location. Navigate to links in just a few keystrokes.
 
