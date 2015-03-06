@@ -1,9 +1,11 @@
 Text-Search
 ===========
 
-Next gen text search for chrome
+Next gen text search for opera
 
 Chrome web store: https://chrome.google.com/webstore/detail/quick-find-next-gen-text/dejblhmebonldngnmeidliaifgiagcjj
+
+Opera web store: https://addons.opera.com/en/extensions/details/quick-find-for-opera/?display=en
 
 Port of Firefox Quick Find features + awesome new ones. Search results in one location. Navigate to links in just a few keystrokes.
 
@@ -13,7 +15,7 @@ I've always wanted the ability to see all the search results in a text search ra
 
 <br>
 ###Description:
-A next gen text search tool for your Chrome web page. Start a search and simply press enter/return on a highlighted link and you'll instantly navigate to that page. A mashup of Firefox quick find features (case match, links only search, highlight all, search selected text) as well as awesome new ones (scroll/navigate through all search results with context) - brought to Chrome.
+A next gen text search tool for your Opera web page. Start a search and simply press enter/return on a highlighted link and you'll instantly navigate to that page. A mashup of Firefox quick find features (case match, links only search, highlight all, search selected text) as well as awesome new ones (scroll/navigate through all search results with context) - brought to Opera.
 
 <br>
 ###Demo:
@@ -56,7 +58,7 @@ Toggle occurs only when cursor focus is on the Quick Find menu.
 
 <br>
 ###Limitations:
-Extension only works on sites that allow content scripts. The chrome webstore page itself for example doesn't even allow content scripts to be run.
+Extension only works on sites that allow content scripts. The Opera webstore page itself for example doesn't even allow content scripts to be run.
 
 Quick find does not search through iframes, script, or code html elements.
 
