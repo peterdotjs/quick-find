@@ -114,13 +114,26 @@
 	function isVisible(element) {
 	  var style;
 	  while (element) {
-	    style = window.getComputedStyle(element);
+	    style = _getComputedStyle(element);
 	    if (style && (style.getPropertyValue('display') == 'none' || style.getPropertyValue('visibility') == 'hidden')){
 			return false;
 	    }
 	    element = element.parentNode;
 	  }
 	  return true;
+	}
+
+  function _getComputedStyle(element){
+		var style,
+				_element = element;
+
+		while(_element && _element.nodeType !== 1){
+			_element = _element.parentNode;
+		}
+
+		style = _element && _element.nodeType == 1 ? window.getComputedStyle(_element) : null;
+		return style;
+
 	}
 
 	function linkCheck(element){

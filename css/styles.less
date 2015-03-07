@@ -1,7 +1,4 @@
-
-
-//@chrome-extension-path: "chrome-extension://kfjdfgmmiadhkdmjhldelcfhjmnglhmd"; //dev
-@chrome-extension-path: "chrome-extension://dejblhmebonldngnmeidliaifgiagcjj";
+@chrome-extension-path: "chrome-extension://__MSG_@@extension_id__";
 
 @icon-font-path:          "@{chrome-extension-path}/fonts/";
 @icon-font-name:          "NotoSans-regular-webfont";
@@ -26,6 +23,15 @@
 		box-sizing: border-box;
 	}
 
+  div {
+    width: auto;
+    height: auto;
+    margin: 0px;
+    padding: 0px;
+    background: none;
+    border-radius: 0px;
+  }
+
 	&.tse-no-results {
 		padding-bottom: 0px;
 
@@ -38,6 +44,10 @@
 		}
 	}
 
+  u {
+    position: static;
+  }
+
 	position: fixed;
 	top: 0;
 	right: 15px;
@@ -46,7 +56,8 @@
 	overflow: hidden;
 	border-radius: 0px 0px 3px 3px;
 	background: rgb(236, 236, 236);
-	padding: 5px 0px 10px 0px;
+	padding: 5px 0px 5px 0px !important;
+  margin: 0px !important;
 	border: 1px solid silver;
 	border-top: 0px;
 
