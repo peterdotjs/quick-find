@@ -13,7 +13,8 @@
   overflow: hidden;
   border-radius: 0px 0px 3px 3px;
   background: #ececec;
-  padding: 5px 0px 10px 0px;
+  padding: 5px 0px 5px 0px !important;
+  margin: 0px !important;
   border: 1px solid silver;
   border-top: 0px;
 }
@@ -24,6 +25,14 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+#text-search-extension div {
+  width: auto;
+  height: auto;
+  margin: 0px;
+  padding: 0px;
+  background: none;
+  border-radius: 0px;
+}
 #text-search-extension.tse-no-results {
   padding-bottom: 0px;
 }
@@ -32,6 +41,9 @@
 }
 #text-search-extension.tse-no-results ul {
   border-bottom: 0px;
+}
+#text-search-extension u {
+  position: static;
 }
 #text-search-extension.tse-hide-text-search {
   display: none;
