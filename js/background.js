@@ -1,7 +1,7 @@
 
-chrome.runtime.onInstalled.addListener(function(details){	
+chrome.runtime.onInstalled.addListener(function(details){
 	if(details.reason === 'install'){
-		chrome.windows.create({url:"http://peterdotjs.com/quick-find-text-search/#content"});	
+		chrome.windows.create({url:"http://peterdotjs.com/quick-find-text-search/#content"});
 	}
 });
 
@@ -28,4 +28,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		}
     }
     sendResponse({});
+});
+
+chrome.commands.onCommand.addListener(function callback(command) {
+
+	if(command.indexOf('quick-find') !== -1){
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+			chrome.tabs.sendMessage(tabs[0].id, {cmd: command}, function(response) {});
+		});
+	}
+
 });
