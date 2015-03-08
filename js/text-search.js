@@ -26,10 +26,25 @@
 		chrome.runtime.sendMessage({method: "logPageView"});
 	}
 
+	chrome.runtime.onMessage.addListener(function (message){
+		if(message && message.cmd){
+			toggleMenu();
+			if(message.cmd.indexOf('links') !== -1){
+					//enable links mode
+					textSearch.linksOnly = true;
+					$displayEl.find('#tse-links-only').addClass('tse-option-select');
+			} else if(message.cmd.indexOf('all') !== -1){
+					//disable links mode
+					textSearch.linksOnly = false;
+					$displayEl.find('#tse-links-only').removeClass('tse-option-select');
+			}
+		}
+	});
+
 	//add settimeout
 	function initDocEvents(doc){
 		$(doc).on('keydown',function(evt){
-			if((evt.which === 191 || evt.which === 222 || (evt.which === 70 && evt.ctrlKey === true && evt.shiftKey === true)) && $(evt.target).is('body')){
+			if((evt.which === 191 || evt.which === 222) && $(evt.target).is('body')){
 				toggleMenu();
 				if(evt.which === 222){ //enable links mode
 					textSearch.linksOnly = true;
