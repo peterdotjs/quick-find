@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Quick Find by peterdotjs</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Quick Find</h1>
+        <h2>Next gen text search for Chrome and Opera. Port of Firefox Quick Find features + awesome new ones. Search results in one location. Navigate to links in just a few keystrokes.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/peterdotjs/Text-Search/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/peterdotjs/Text-Search/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/peterdotjs/Text-Search" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <p><img src="https://raw.githubusercontent.com/peterdotjs/resources/master/quick-find/ss1.png" alt="Quick Find Screenshot"></p>
+
+<h3>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install:</h3>
+
+<p><a href="https://chrome.google.com/webstore/detail/quick-find-next-gen-text/dejblhmebonldngnmeidliaifgiagcjj"><img src="https://raw.githubusercontent.com/peterdotjs/resources/master/Franksouza183-Fs-Apps-google-chrome.ico" height="100" width="100"></a><a href="https://addons.opera.com/en/extensions/details/quick-find-for-operatm/"><img src="https://raw.githubusercontent.com/peterdotjs/resources/master/opera-browser.png" height="100" width="100"></a></p>
+
+<p><br></p>
+
+<h3>
+<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo:</h3>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=x2PEyTyJ6iM">https://www.youtube.com/watch?v=x2PEyTyJ6iM</a></li>
+</ul>
+
+<p><br></p>
+
+<h3>
+<a id="change-log" class="anchor" href="#change-log" aria-hidden="true"><span class="octicon octicon-link"></span></a>Change Log:</h3>
+
+<ul>
+<li>0.0.12: Added ability to change default shortcut keys</li>
+<li>0.0.11: Fixed issue where search is broken in Chrome 40.</li>
+</ul>
+
+<p><br></p>
+
+<h3>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Motivation:</h3>
+
+<ul>
+<li>I've always wanted the ability to see all the search results in a text search rather than just seeing them highlighted and scattered accross the page and out of view. This was the start of the idea and it soon became mashed up with all the great Firefox quick find features that Chrome is missing.</li>
+</ul>
+
+<p><br></p>
+
+<h3>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description:</h3>
+
+<ul>
+<li>A next gen text search tool for your Chromium web page. Start a search and simply press enter/return on a highlighted link and you'll instantly navigate to that page. A mashup of Firefox quick find features (case match, links only search, highlight all, search selected text) as well as awesome new ones (scroll/navigate through all search results with context) - brought to Chrome and Opera. </li>
+</ul>
+
+<p><br></p>
+
+<h3>
+<a id="shortcut-keys" class="anchor" href="#shortcut-keys" aria-hidden="true"><span class="octicon octicon-link"></span></a>Shortcut keys:</h3>
+
+<h4>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started:</h4>
+
+<p><kbd>/</kbd>  or   <kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>f</kbd>  : forward slash or ctrl+shift+f will open Quick Find menu</p>
+
+<p><kbd>'</kbd>  : single quote key will open Quick Find menu in links mode (only links are searched)</p>
+
+<p><kbd>esc</kbd>  : escape key will close Quick Find menu</p>
+
+<p><br></p>
+
+<h4>
+<a id="menu-navigation" class="anchor" href="#menu-navigation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Menu navigation:</h4>
+
+<p><kbd>↑</kbd>  or  <kbd>↓</kbd>
+  : navigate results by using up or down arrow keys</p>
+
+<p><kbd>enter</kbd>  or  <kbd>return</kbd> : pressing enter on highlighted menu with link will navigate to the link</p>
+
+<p><br></p>
+
+<h4>
+<a id="search-options" class="anchor" href="#search-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Search Options:</h4>
+
+<p><kbd>alt</kbd> + <kbd>a</kbd>  : toggle highlight all results mode</p>
+
+<p><kbd>alt</kbd> + <kbd>c</kbd>  : toggle match case mode</p>
+
+<p><kbd>alt</kbd> + <kbd>l</kbd>  : toggle links mode</p>
+
+<p><br></p>
+
+<h4>
+<a id="tips" class="anchor" href="#tips" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tips:</h4>
+
+<ul>
+<li>Quick Find search box is prepopulated with any selected/highlighted text prior to opening the search menu.</li>
+<li>Toggle occurs only when cursor focus is on the Quick Find menu.</li>
+</ul>
+
+<p><br></p>
+
+<h3>
+<a id="limitations" class="anchor" href="#limitations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Limitations:</h3>
+
+<ul>
+<li>Extension only works on sites that allow content scripts. The chrome webstore page itself for example doesn't even allow content scripts to be run.</li>
+<li>Quick find does not search through iframes, script, or code html elements.</li>
+<li>When results show up in same html element, will be shown only as one result.</li>
+<li>Other website shortcuts or extensions may conflict with these shortcuts. A future enhancement can be to select your own shortcuts to open the menu.</li>
+</ul>
+
+<p><br></p>
+
+<h3>
+<a id="additional-notes" class="anchor" href="#additional-notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Additional Notes</h3>
+
+<ul>
+<li>Anonymous page view tracking is used to improve the extension and user experience. You can opt out in the options menu.</li>
+</ul>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
