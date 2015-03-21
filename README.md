@@ -1,9 +1,8 @@
 Text-Search
 ===========
 
-Next gen text search for Chrome and Opera
-
-Port of Firefox Quick Find features + awesome new ones. Search results in one location. Navigate to links in just a few keystrokes.
+**Next gen text search for Chrome and Opera.** **Port of Firefox Quick Find features + awesome new ones.** 
+Search results in one location. Navigate to links in just a few keystrokes.
 
 ![Quick Find Screenshot](https://raw.githubusercontent.com/peterdotjs/resources/master/quick-find/ss1.png)
 
