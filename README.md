@@ -1,4 +1,4 @@
-Text-Search
+Quick-Find
 ===========
 
 ####**Next gen text search for Chrome and Opera.**
