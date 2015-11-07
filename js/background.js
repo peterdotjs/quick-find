@@ -33,7 +33,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			chrome.tabs.create({
 				url: request.url,
 				openerTabId: sender.tab.id,
-				index: sender.tab.index + 1
+				index: sender.tab.index + 1,
+				active: request.active
 			});
 			break;
 

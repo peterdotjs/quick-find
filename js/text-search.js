@@ -350,6 +350,13 @@
 						if(evt.shiftKey === true){
 							chrome.runtime.sendMessage({
 								method: "newTab",
+								active: true,
+								url: $link.attr('href')
+							});
+						} else if (evt.ctrlKey === true) {
+							chrome.runtime.sendMessage({
+								method: "newTab",
+								active: false,
 								url: $link.attr('href')
 							});
 						} else {
