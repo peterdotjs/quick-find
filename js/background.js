@@ -38,6 +38,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			});
 			break;
 
+		case "newWindow":
+			chrome.windows.create({
+				url: request.url,
+			});
+			break;
+
 		default:
 			// Don't respond to unknown messages
 			return;

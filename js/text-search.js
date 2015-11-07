@@ -347,7 +347,12 @@
 				case 13: //enter
 					$link = $selected.find('a');
 					if($link.length > 0){
-						if(evt.shiftKey === true){
+						if(evt.shiftKey === true && evt.ctrlKey === true){
+							chrome.runtime.sendMessage({
+								method: "newWindow",
+								url: $link.attr('href')
+							});
+						} else if(evt.shiftKey === true){
 							chrome.runtime.sendMessage({
 								method: "newTab",
 								active: true,
