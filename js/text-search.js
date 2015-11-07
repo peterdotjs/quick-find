@@ -348,9 +348,10 @@
 					$link = $selected.find('a');
 					if($link.length > 0){
 						if(evt.shiftKey === true){
-							$link.attr('target','_blank');
-							$link.trigger('click');
-							$link.attr('target','_blank');
+							chrome.runtime.sendMessage({
+								method: "newTab",
+								url: $link.attr('href')
+							});
 						} else {
 							location.href = $link.attr('href');
 						}

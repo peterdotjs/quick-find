@@ -29,6 +29,14 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			}
 			break;
 
+		case "newTab":
+			chrome.tabs.create({
+				url: request.url,
+				openerTabId: sender.tab.id,
+				index: sender.tab.index + 1
+			});
+			break;
+
 		default:
 			// Don't respond to unknown messages
 			return;
