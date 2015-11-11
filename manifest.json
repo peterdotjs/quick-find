@@ -33,8 +33,5 @@
     "quick-find-search-links": {
       "description": "Search all links"
     }
-  },
-  "permissions": [
-      "tabs"
-  ]
+  }
 }
