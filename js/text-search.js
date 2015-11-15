@@ -347,10 +347,23 @@
 				case 13: //enter
 					$link = $selected.find('a');
 					if($link.length > 0){
-						if(evt.shiftKey === true){
-							$link.attr('target','_blank');
-							$link.trigger('click');
-							$link.attr('target','_blank');
+						if(evt.shiftKey === true && evt.ctrlKey === true){
+							chrome.runtime.sendMessage({
+								method: "newWindow",
+								url: $link.attr('href')
+							});
+						} else if(evt.shiftKey === true){
+							chrome.runtime.sendMessage({
+								method: "newTab",
+								active: true,
+								url: $link.attr('href')
+							});
+						} else if (evt.ctrlKey === true) {
+							chrome.runtime.sendMessage({
+								method: "newTab",
+								active: false,
+								url: $link.attr('href')
+							});
 						} else {
 							location.href = $link.attr('href');
 						}
