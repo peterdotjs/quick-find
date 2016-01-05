@@ -16,7 +16,8 @@ Quick-Find
 
 <br>
 
-###Change Log: 
+###Change Log:
+- 0.0.13: Added support for regex searches.
 - 0.0.12: Added ability to change default shortcut keys
 - 0.0.11: Fixed issue where search is broken in Chrome 40.
 
@@ -28,7 +29,7 @@ Quick-Find
 <br>
 
 ###Description:
-- A next gen text search tool for your Chromium web page. Start a search and simply press enter/return on a highlighted link and you'll instantly navigate to that page. A mashup of Firefox quick find features (case match, links only search, highlight all, search selected text) as well as awesome new ones (scroll/navigate through all search results with context) - brought to Chrome and Opera. 
+- A next gen text search tool for your Chromium web page. Start a search and simply press enter/return on a highlighted link and you'll instantly navigate to that page. A mashup of Firefox quick find features (case match, links only search, highlight all, search selected text) as well as awesome new ones (scroll/navigate through all search results with context) - brought to Chrome and Opera.
 
 <br>
 
