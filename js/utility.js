@@ -7,9 +7,17 @@
 			var data = node ? node.data : '',
 				parent = node ? node.parentNode : null,
 				re = null,
-				startIndex = 0;
+				startIndex = 0,
+                input = textSearch.input;
 
-			re = new RegExp(textSearch.input.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"),textSearch.matchCase ? "": "i");
+            if (!textSearch.useRegex)
+                input = utility.regexEscape(input);
+
+            try {
+			    re = new RegExp(input.replace(/[,#\s]/, "\\$&"), textSearch.matchCase ? "": "i");
+            } catch (e) { // Syntax Error
+    			return NodeFilter.FILER_REJECT;
+            }
 
 			startIndex = data.search(re);
 
@@ -139,7 +147,6 @@
 	function linkCheck(element){
 		if(textSearch.linksOnly){
 		  while (element) {
-		  	debugger;
 		    if (element.nodeName === 'A'){
 				return true;
 		    }

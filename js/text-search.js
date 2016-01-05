@@ -7,6 +7,7 @@
 		nodeIteratorPlaceholder: null,
 		nodeIteratorIndex: 0,
 		matchCase: false,
+		useRegex: false,
 		linksOnly: false,
 		highlightAll: false
 	};
@@ -82,7 +83,7 @@
 	function toggleMenu(){
 		$displayEl = $('#text-search-extension');
 		if($displayEl.length === 0){ //menu has not been initialized
-			$displayEl = $('<div id="text-search-extension" class="tse-no-results"><div id="tse-search-wrap"><div id="tse-search-wrap-inner"><input type="text" id="tse-search" placeholder="Find in page" autocomplete="off"></input><div id="tse-search-index-wrap"><div id="tse-search-index">0</div>of<div id="tse-search-total">0</div></div></div><i tabindex="0"></i></div><div id="tse-options"><span id="tse-match-case">Match <u>C</u>ase</span><span id="tse-links-only"><u>L</u>inks Only</span><span id="tse-highlight-all">Highlight <u>A</u>ll</span><a title="If you like Quick Find you can show your support rating it &#9733; 5 stars and leaving a nice little review" id="tse-rate-it" target="_blank" href="https://chrome.google.com/webstore/detail/dejblhmebonldngnmeidliaifgiagcjj/reviews">&#9733;</a></div><ul role="menu"></ul></div>');
+			$displayEl = $('<div id="text-search-extension" class="tse-no-results"><div id="tse-search-wrap"><div id="tse-search-wrap-inner"><input type="text" id="tse-search" placeholder="Find in page" autocomplete="off"></input><div id="tse-search-index-wrap"><div id="tse-search-index">0</div>of<div id="tse-search-total">0</div></div></div><i tabindex="0"></i></div><div id="tse-options"><span id="tse-match-case">Match <u>C</u>ase</span><span id="tse-regex"><u>R</u>egex</span><span id="tse-links-only"><u>L</u>inks Only</span><span id="tse-highlight-all">Highlight <u>A</u>ll</span><a title="If you like Quick Find you can show your support rating it &#9733; 5 stars and leaving a nice little review" id="tse-rate-it" target="_blank" href="https://chrome.google.com/webstore/detail/dejblhmebonldngnmeidliaifgiagcjj/reviews">&#9733;</a></div><ul role="menu"></ul></div>');
 			$('body').after($displayEl);
 			$resultSet = $displayEl.find('ul');
 			$searchIndex = $displayEl.find('#tse-search-index');
@@ -124,6 +125,9 @@
 			case "tse-match-case":
 				textSearch.matchCase = textSearch.matchCase ? false : true; //toggle
 				break;
+            case "tse-regex":
+                textSearch.useRegex = textSearch.useRegex ? false : true; //toggle
+                break;
 			case "tse-links-only":
 				textSearch.linksOnly = textSearch.linksOnly ? false : true; //toggle
 				break;
@@ -246,7 +250,6 @@
 
 	function searchHelper(nodeIterator){
 		var textNode = null,
-			length = textSearch.input.length,
 			i=0,
 			$parent,
 			startIndex,
@@ -264,6 +267,9 @@
 		}
 
 		while ((textNode = nodeIterator.nextNode()) !== null) {
+            var input = textSearch.useRegex ? (textNode.textContent.match(new RegExp(textSearch.input)) || [""])[0] : textSearch.input,
+                length = input.length;
+
 			$parent = $(textNode).parent();
 			startIndex = textSearch.resultsIndex[textSearch.nodeIteratorIndex];
 			_input = textNode.data.slice(startIndex, startIndex + length);
@@ -386,6 +392,12 @@
 					return false;
 				}
 				break;
+            case 82: //r - regex
+                if (evt.altKey === true) {
+                    optionsCb($displayEl.find('#tse-regex'));
+                    return false;
+                }
+                break;
 			default:
 				break;
 		}
@@ -431,7 +443,6 @@
 
 	//highlighting one item
 	function highlightSelected(index,data,selected){
-
 		if(textSearch.highlightAll && selected){
 			curHighlightDiv = data.el.find('.ts-ce-hl');
 			if(curHighlightDiv.length > 0){
