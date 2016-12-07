@@ -79,3 +79,8 @@ Quick-Find
 
 ###Additional Notes
 - Anonymous page view tracking is used to improve the extension and user experience. You can opt out in the options menu.
+
+<br>
+
+###License
+- See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).
