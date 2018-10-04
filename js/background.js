@@ -1,10 +1,3 @@
-
-chrome.runtime.onInstalled.addListener(function(details){
-	if(details.reason === 'install'){
-		chrome.windows.create({url:"http://peterdotjs.com/quick-find-text-search/#content"});
-	}
-});
-
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.method == "logPageView"){
 		var optOut = localStorage['tracking-opt-out'],
