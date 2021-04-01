@@ -1,7 +1,7 @@
 
 chrome.runtime.onInstalled.addListener(function(details){
 	if(details.reason === 'install'){
-		chrome.windows.create({url:"http://peterdotjs.com/quick-find-text-search/#content"});
+		chrome.windows.create({url:"http://peterjshin.com/quick-find-text-search/#content"});
 	}
 });
 
