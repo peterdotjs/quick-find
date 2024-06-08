@@ -1,14 +1,16 @@
 {
   "name": "Quick Find for Google Chrome™",
   "short_name": "Quick Find",
-  "version": "0.0.13",
-  "manifest_version": 2,
+  "version": "0.0.14",
+  "manifest_version": 3,
   "description": "Port of Firefox Quick Find features + awesome new ones. Search results in one location. Navigate to links in just a few keystrokes.",
   "icons": { "16": "images/icons/icon16.png",
          "48": "images/icons/icon48.png",
         "128": "images/icons/icon128.png" },
   "background": {
-    "scripts": ["js/background.js"]
+    "service_worker": "js/background.js",
+    "type": "module"
+
   },
   "content_scripts": [ {
       "js": ["js/lib/jquery-2.1.1.min.js","js/utility.js","js/text-search.js" ],
@@ -16,11 +18,13 @@
       "matches": [ "http://*/*", "https://*/*", "ftp://*/*" ]
    } ],
   "offline_enabled": true,
-  "web_accessible_resources": [
-    "fonts/*",
-    "images/sprites*"
-  ],
-  "content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
+  "web_accessible_resources": [{
+    "resources": ["fonts/*", "images/sprites*"],
+    "matches": ["*://*/*"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'"
+  },
   "options_page": "options.html",
   "commands": {
     "quick-find-search-all": {
